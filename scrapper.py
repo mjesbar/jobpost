@@ -45,7 +45,7 @@ posts = browser.find_elements(By.CLASS_NAME, "box_offer")
 
 
 # Crawling the url --------------------------------------------------------------------------------
-for post in posts[0:5]:
+for post in posts:
     # selecting the next post
     post.click()
     # waiting for post details, nextpage button and all the post main tags

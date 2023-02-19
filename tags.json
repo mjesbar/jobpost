@@ -1,0 +1,61 @@
+{
+    "tags": {
+        "languages": [
+            "Javascript",
+            "Python",
+            "Go",
+            "Java",
+            "Kotlin",
+            "PHP",
+            "C#",
+            "Swift",
+            "R",
+            "Ruby",
+            "C",
+            "C++",
+            "Matlab",
+            "TypeScript",
+            "Scala",
+            "SQL",
+            "HTML",
+            "CSS",
+            "NoSQL",
+            "Rust",
+            "Perl"
+        ],
+        "softwares": [
+            "Hadoop",
+            "Spark",
+            "Kafka",
+            "MySQL",
+            "PostgreSQL",
+            "SQL server",
+            "Pandas",
+            "Matplotlib",
+            "Numpy",
+            "ETL",
+            "AWS",
+            "Azure",
+            "GCP",
+            "Excel",
+            "Power Point",
+            "Word",
+            "Power BI",
+            "Tableu",
+            "SAP",
+            "Oracle"
+        ],
+        "services": [
+            "S3",
+            "Lambda",
+            "EC2",
+            "Glue",
+            "Redshift",
+            "RDS",
+            "DynamoDB",
+            "Athena",
+            "Bigquery",
+            "Cloud Storage"
+        ]
+    }
+}

@@ -1,6 +1,4 @@
 import json, math, time, os
-from operator import pos
-from numpy import take_along_axis
 from pyspark import pandas
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
@@ -9,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
-columns = ['id','title','city','department','type','postDate','company','salary','education','minAge','maxAge','english','experience','workShift']
+columns = ['id','title','city','department','type','postDate','company','salary','education','age','experience','description']
 
 #general_dataframe = pandas.DataFrame(columns=columns)
 #shift_dataframe = pandas.DataFrame(columns=columns)
@@ -17,9 +15,10 @@ columns = ['id','title','city','department','type','postDate','company','salary'
 # Creating the driver instance ------------------------------------------------------------------
 chrome_options = ChromeOptions()
 chrome_options.page_load_strategy = 'normal'
+chrome_options.add_argument('--user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"')
 chrome_options.add_argument('--start-in-incognito')
 #chrome_options.add_argument('--headless')
-chrome_options.add_argument('--window-position=300,0')
+chrome_options.add_argument('--window-position=544,0')
 chrome_options.add_argument('--window-size=1376,1080')
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-extensions')
@@ -111,7 +110,15 @@ while (True):
         for item in post_requirements:
             post_experience = item.text if ('experiencia' in item.text) else None
 
-        print("info:\t", post_id, post_department, post_city, post_type, post_salary, post_date, post_company, post_education, post_age, post_experience)
+        post_description = None
+        fs16class = post_detail.find_elements(By.CLASS_NAME, "fs16")
+        for element in fs16class:
+            post_description = element.text if (element.get_attribute(name="class") == 'fs16') else None
+            if (post_description!=None): break
+
+        print("postinfo:\n", post_description)
+        
+        # following clicks and scrolling down
         scroll += 140
         browser.execute_script(f"arguments[0].scrollTo(0, {scroll})", post_box)
 

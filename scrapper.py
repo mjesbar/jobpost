@@ -1,4 +1,7 @@
-import json, math, time, os, pandas
+import json, math, time, os
+from operator import pos
+from numpy import take_along_axis
+from pyspark import pandas
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import Chrome, ChromeOptions
@@ -6,12 +9,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
+columns = ['id','title','city','department','type','postDate','company','salary','education','minAge','maxAge','english','experience','workShift']
+
+#general_dataframe = pandas.DataFrame(columns=columns)
+#shift_dataframe = pandas.DataFrame(columns=columns)
 
 # Creating the driver instance ------------------------------------------------------------------
 chrome_options = ChromeOptions()
 chrome_options.page_load_strategy = 'normal'
 chrome_options.add_argument('--start-in-incognito')
-#Chrome_options.add_argument('--headless')
+#chrome_options.add_argument('--headless')
 chrome_options.add_argument('--window-position=300,0')
 chrome_options.add_argument('--window-size=1376,1080')
 chrome_options.add_argument('--disable-gpu')
@@ -22,8 +29,8 @@ browser = webdriver.Chrome(options=chrome_options)
 
 URL = 'https://co.computrabajo.com/trabajo-de-datos'
 browser.get(URL)
-print(f"URL     : {browser.current_url}")
-print(f"Title   : {browser.title}\n")
+print(f"URL     : {browser.current_url}.")
+print(f"Site   : {browser.title}.\n")
 
 # setting filters
 print(f"Setting filters ... ")
@@ -34,7 +41,7 @@ date_filter = browser.find_elements(By.CLASS_NAME, "field_select_links.small")
 date_filter[1].click()
 date_lastweek = browser.find_element(By.CLASS_NAME, "field_select_links.small.open")
 date_lastweek = date_lastweek.find_elements(By.CLASS_NAME, "buildLink")
-date_lastweek[3].click()
+date_lastweek[1].click()
 
 # getting the total offers found
 post_grid = browser.find_element(By.ID, "offersGridOfferContainer")
@@ -59,7 +66,6 @@ while (True):
     for post in posts:
         # selecting the next post
         post.click()
-        print(browser.current_url)
         # waiting for important tags
         WebDriverWait(browser, timeout=5).until(
             expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "box_offer"))#'post details'
@@ -72,15 +78,44 @@ while (True):
         )
         # grabbing the data
         post_detail = browser.find_element(By.CLASS_NAME, "box_detail")
-        post_title  = post_detail.find_element(By.CLASS_NAME, "title_offer.fs21.fwB.lh1_2")
-        post_salary = post_detail.find_element(By.CLASS_NAME, "tag.base.mb10")
 
-        #print("title:\t", post_title.text)
-        #print("salary:\t", post_salary.text)
+        post_id = browser.current_url.split('#')[-1]
+
+        post_title = post_detail.find_element(By.CLASS_NAME, "title_offer.fs21.fwB.lh1_2").text
+
+        place = post_detail.find_element(By.CLASS_NAME, "mb5.mt5.fs16").find_elements(By.TAG_NAME, "span")[-1]
+        place = place.text.split(',')
+        post_department = place[0] if (place[0]!='Bogotá') else 'Cundinamarca' 
+        post_city = place[1] if (place[1]!=' D.C.') else 'Bogotá'
+
+        labels = post_detail.find_elements(By.CLASS_NAME, "tag.base.mb10")
+        post_type = labels[-1].text if (('remoto' in labels[-1].text.lower()) | ('presencial' in labels[-1].text.lower())) else None
+        post_salary = labels[0].text if ('$' in labels[0].text) else None
+
+        post_date = post_detail.find_element(By.CLASS_NAME, "fc_aux.fs13").text
+
+        post_company = post_detail.find_element(By.CLASS_NAME, "mb5.mt5.fs16")
+        try: post_company = post_company.find_element(By.TAG_NAME, "a").text
+        except: post_company = None
+
+        post_requirements = post_detail.find_element(By.CLASS_NAME, "fs16.disc.mbB").find_elements(By.TAG_NAME, "li")
+        post_education = None
+        for item in post_requirements:
+            post_education = item.text if ('Educación mínima' in item.text) else None
+        
+        post_age = None
+        for item in post_requirements:
+            post_age = item.text if ('Edad' in item.text) else None
+        
+        post_experience = None
+        for item in post_requirements:
+            post_experience = item.text if ('experiencia' in item.text) else None
+
+        print("info:\t", post_id, post_department, post_city, post_type, post_salary, post_date, post_company, post_education, post_age, post_experience)
         scroll += 140
         browser.execute_script(f"arguments[0].scrollTo(0, {scroll})", post_box)
 
-    #'next' button
+    # 'next' button
     try:
         WebDriverWait(browser, timeout=5).until(
             expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "b_primary.w48.buildLink.cp")),#'post body'

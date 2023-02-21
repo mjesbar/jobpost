@@ -1,4 +1,4 @@
-import json, math, time, os
+import json, math, time, os, base64, numpy, warnings
 from pyspark import pandas
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
@@ -7,17 +7,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
-columns = ['id','title','city','department','type','postDate','company','salary','education','age','experience','description']
+# configurations
+warnings.filterwarnings('ignore')
 
-#general_dataframe = pandas.DataFrame(columns=columns)
-#shift_dataframe = pandas.DataFrame(columns=columns)
+
+columns = ['id','title','city','department','type','postDate','company','salary','education','age','experience','description']
+partition = pandas.DataFrame(columns=columns)
+shift_data = list()
+
 
 # Creating the driver instance ------------------------------------------------------------------
 chrome_options = ChromeOptions()
 chrome_options.page_load_strategy = 'normal'
 chrome_options.add_argument('--user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"')
 chrome_options.add_argument('--start-in-incognito')
-#chrome_options.add_argument('--headless')
+chrome_options.add_argument('--headless')
 chrome_options.add_argument('--window-position=544,0')
 chrome_options.add_argument('--window-size=1376,1080')
 chrome_options.add_argument('--disable-gpu')
@@ -26,10 +30,9 @@ chrome_options.add_argument('--disable-extensions')
 # going toward the target url
 browser = webdriver.Chrome(options=chrome_options)
 
+# starting the search
 URL = 'https://co.computrabajo.com/trabajo-de-datos'
 browser.get(URL)
-print(f"URL     : {browser.current_url}.")
-print(f"Site   : {browser.title}.\n")
 
 # setting filters
 print(f"Setting filters ... ")
@@ -38,9 +41,9 @@ WebDriverWait(browser, timeout=5).until(
 )
 date_filter = browser.find_elements(By.CLASS_NAME, "field_select_links.small")
 date_filter[1].click()
-date_lastweek = browser.find_element(By.CLASS_NAME, "field_select_links.small.open")
-date_lastweek = date_lastweek.find_elements(By.CLASS_NAME, "buildLink")
-date_lastweek[1].click()
+date_today = browser.find_element(By.CLASS_NAME, "field_select_links.small.open")
+date_today = date_today.find_elements(By.CLASS_NAME, "buildLink")
+date_today[1].click()
 
 # getting the total offers found
 post_grid = browser.find_element(By.ID, "offersGridOfferContainer")
@@ -48,10 +51,15 @@ post_amount = post_grid.find_element(By.TAG_NAME, "span").text
 pages_per_page = 20
 pages = math.ceil(int(post_amount.replace('.','')) / pages_per_page)
 page_index = range(pages_per_page)
+
+# preface information
+print(f"URL     : {browser.current_url}.")
+print(f"Site   : {browser.title}.\n")
 print("total amount of offers", post_amount, "Pages", page_index)
 
 # Crawling the url --------------------------------------------------------------------------------
 while (True):
+
     scroll = 0
     # clicking over the annoying suggestion alert
     web_popup = browser.find_element(By.ID, "pop-up-webpush-sub")
@@ -62,6 +70,7 @@ while (True):
     # getting the current page main offers element
     post_box = browser.find_element(By.ID, "offersGridOfferContainer")
     posts = post_box.find_elements(By.TAG_NAME, "article")
+
     for post in posts:
         # selecting the next post
         post.click()
@@ -115,25 +124,53 @@ while (True):
         for element in fs16class:
             post_description = element.text if (element.get_attribute(name="class") == 'fs16') else None
             if (post_description!=None): break
+        post_description_message = str(post_description).encode('utf-8')
+        post_description_encoded =  base64.b64encode(post_description_message)
 
-        print("postinfo:\n", post_description)
-        
         # following clicks and scrolling down
         scroll += 140
         browser.execute_script(f"arguments[0].scrollTo(0, {scroll})", post_box)
+        # appending the data collected in page
+        #['id','title','city','department','type','postDate','company','salary','education','age','experience','description']
+        shift_data.append(
+            [
+                post_id,
+                post_title,
+                post_city,
+                post_department,
+                post_type,
+                post_date,post_company,
+                post_salary,
+                post_education,
+                post_age,
+                post_experience,
+                #post_description_encoded
+            ]
+        )
+        # end for ----------
 
-    # 'next' button
+    # saving partition DataFrame
+    print("saving the following Series/dict-like into the current partition\n")
+    partition = partition.append(pandas.DataFrame(shift_data, columns=columns),
+                                 ignore_index=True)
+    os.system('touch ./data/data.csv')
+    print(partition, "DataFrame final")
+    #partition.to_csv(path='./data/data.csv',
+    #                 mode='append')
+    # empty the shift_data temporal array
+    shift_data = list()
+    # clicking the 'next' button
     try:
         WebDriverWait(browser, timeout=5).until(
-            expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "b_primary.w48.buildLink.cp")),#'post body'
+            expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "b_primary.w48.buildLink.cp")),
         )
     except:
         print("that's all bro")
         break
     else:
-        # going to the next page
         next_page = browser.find_element(By.CLASS_NAME, "b_primary.w48.buildLink.cp")
         next_page.click()
+    # end while ----------
 
 browser.close()
 browser.quit()

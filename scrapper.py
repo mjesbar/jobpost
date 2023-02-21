@@ -1,5 +1,4 @@
-import json, math, time, os, base64, numpy, warnings
-from pyspark import pandas
+import json, math, time, os, base64, numpy, warnings, pandas, datetime
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import Chrome, ChromeOptions
@@ -7,13 +6,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
+
 # configurations
 warnings.filterwarnings('ignore')
 
 
-columns = ['id','title','city','department','type','postDate','company','salary','education','age','experience','description']
+columns = ['id','title','city','department','type','postDate','timeStamp','company','salary','education','age','experience','description']
+partition_date = datetime.date.today()
 partition = pandas.DataFrame(columns=columns)
 shift_data = list()
+null = numpy.nan
 
 
 # Creating the driver instance ------------------------------------------------------------------
@@ -36,7 +38,7 @@ browser.get(URL)
 
 # setting filters
 print(f"Setting filters ... ")
-WebDriverWait(browser, timeout=5).until(
+WebDriverWait(browser, timeout=10).until(
     expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "field_select_links.small"))
 )
 date_filter = browser.find_elements(By.CLASS_NAME, "field_select_links.small")
@@ -50,17 +52,22 @@ post_grid = browser.find_element(By.ID, "offersGridOfferContainer")
 post_amount = post_grid.find_element(By.TAG_NAME, "span").text
 pages_per_page = 20
 pages = math.ceil(int(post_amount.replace('.','')) / pages_per_page)
-page_index = range(pages_per_page)
+page_index = math.ceil(int(post_amount) / pages_per_page)
 
 # preface information
-print(f"URL     : {browser.current_url}.")
-print(f"Site   : {browser.title}.\n")
-print("total amount of offers", post_amount, "Pages", page_index)
+print(f"Site : {browser.title}.")
+print(f"URL  : {browser.current_url}.")
+print("Total offers", post_amount)
+print("Pages", page_index)
+page = 1
+graphic = ['·    ','··   ','···  ','···· ','·····']
+
 
 # Crawling the url --------------------------------------------------------------------------------
 while (True):
 
     scroll = 0
+    post_number = 0
     # clicking over the annoying suggestion alert
     web_popup = browser.find_element(By.ID, "pop-up-webpush-sub")
     web_popup = web_popup.find_elements(By.TAG_NAME, "button")[0]
@@ -73,15 +80,16 @@ while (True):
 
     for post in posts:
         # selecting the next post
+        post_number += 1
         post.click()
         # waiting for important tags
-        WebDriverWait(browser, timeout=5).until(
+        WebDriverWait(browser, timeout=10).until(
             expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "box_offer"))#'post details'
         )
-        WebDriverWait(browser, timeout=5).until(
+        WebDriverWait(browser, timeout=10).until(
             expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "box_detail"))#'apply' button, crucial to check intern data is available
         )
-        WebDriverWait(browser, timeout=5).until(
+        WebDriverWait(browser, timeout=10).until(
             expected_conditions.text_to_be_present_in_element((By.CLASS_NAME, "b_primary.big"), "Postularme")
         )
         # grabbing the data
@@ -97,41 +105,46 @@ while (True):
         post_city = place[1] if (place[1]!=' D.C.') else 'Bogotá'
 
         labels = post_detail.find_elements(By.CLASS_NAME, "tag.base.mb10")
-        post_type = labels[-1].text if (('remoto' in labels[-1].text.lower()) | ('presencial' in labels[-1].text.lower())) else None
-        post_salary = labels[0].text if ('$' in labels[0].text) else None
+        post_type = labels[-1].text if (('remoto' in labels[-1].text.lower()) | ('presencial' in labels[-1].text.lower())) else null
+        post_salary = labels[0].text if ('$' in labels[0].text) else null
 
         post_date = post_detail.find_element(By.CLASS_NAME, "fc_aux.fs13").text
 
         post_company = post_detail.find_element(By.CLASS_NAME, "mb5.mt5.fs16")
         try: post_company = post_company.find_element(By.TAG_NAME, "a").text
-        except: post_company = None
+        except: post_company = null
 
         post_requirements = post_detail.find_element(By.CLASS_NAME, "fs16.disc.mbB").find_elements(By.TAG_NAME, "li")
-        post_education = None
+        post_education = null
         for item in post_requirements:
-            post_education = item.text if ('Educación mínima' in item.text) else None
+            post_education = item.text if ('Educación mínima' in item.text) else null
         
-        post_age = None
+        post_age = null
         for item in post_requirements:
-            post_age = item.text if ('Edad' in item.text) else None
+            post_age = item.text if ('Edad' in item.text) else null
         
-        post_experience = None
+        post_experience = null
         for item in post_requirements:
-            post_experience = item.text if ('experiencia' in item.text) else None
+            post_experience = item.text if ('experiencia' in item.text) else null
 
-        post_description = None
+        post_description = null
         fs16class = post_detail.find_elements(By.CLASS_NAME, "fs16")
         for element in fs16class:
-            post_description = element.text if (element.get_attribute(name="class") == 'fs16') else None
-            if (post_description!=None): break
-        post_description_message = str(post_description).encode('utf-8')
-        post_description_encoded =  base64.b64encode(post_description_message)
+            if (element.get_attribute("class") == 'fs16'):
+                post_description = element.text
+                break
+        post_description_utf8 = str(post_description).encode('utf-8')
+        post_description_encoded = base64.b64encode(post_description_utf8)
+
+        timeStamp = partition_date
 
         # following clicks and scrolling down
         scroll += 140
         browser.execute_script(f"arguments[0].scrollTo(0, {scroll})", post_box)
+        #rolling graphic
+        print(f"\rL Scrapping Status [{page}/{page_index}] {graphic[post_number%5]}", end='')
         # appending the data collected in page
-        #['id','title','city','department','type','postDate','company','salary','education','age','experience','description']
+        #['id','title','city','department','type','postDate','timeStamp','company','salary','education','age','experience','description']
         shift_data.append(
             [
                 post_id,
@@ -139,29 +152,36 @@ while (True):
                 post_city,
                 post_department,
                 post_type,
-                post_date,post_company,
+                post_date,
+                timeStamp,
+                post_company,
                 post_salary,
                 post_education,
                 post_age,
                 post_experience,
-                #post_description_encoded
+                post_description_encoded    
             ]
         )
         # end for ----------
 
     # saving partition DataFrame
-    print("saving the following Series/dict-like into the current partition\n")
+    print("[OK] ", end='')
     partition = partition.append(pandas.DataFrame(shift_data, columns=columns),
                                  ignore_index=True)
-    os.system('touch ./data/data.csv')
-    print(partition, "DataFrame final")
-    #partition.to_csv(path='./data/data.csv',
-    #                 mode='append')
+    print("size:", partition.size, "bytes, shape:", partition.shape, "RowxCol.")
+    partition.to_csv(
+        path_or_buf=f'data/data{partition_date}.csv.gz',
+        mode='w',
+        compression={'method': 'gzip'})
+    partition.to_parquet(
+        path=f'data/data{partition_date}.parquet.gz',
+        engine='pyarrow',
+        compression='gzip')
     # empty the shift_data temporal array
-    shift_data = list()
+    shift_data.clear()
     # clicking the 'next' button
     try:
-        WebDriverWait(browser, timeout=5).until(
+        WebDriverWait(browser, timeout=10).until(
             expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "b_primary.w48.buildLink.cp")),
         )
     except:
@@ -170,6 +190,7 @@ while (True):
     else:
         next_page = browser.find_element(By.CLASS_NAME, "b_primary.w48.buildLink.cp")
         next_page.click()
+        page += 1
     # end while ----------
 
 browser.close()

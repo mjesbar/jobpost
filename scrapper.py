@@ -23,7 +23,7 @@ chrome_options = ChromeOptions()
 chrome_options.page_load_strategy = 'normal'
 chrome_options.add_argument('--user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"')
 chrome_options.add_argument('--start-in-incognito')
-chrome_options.add_argument('--headless')
+#chrome_options.add_argument('--headless')
 chrome_options.add_argument('--window-position=544,0')
 chrome_options.add_argument('--window-size=1376,1080')
 chrome_options.add_argument('--disable-gpu')
@@ -39,8 +39,7 @@ browser.get(URL)
 # setting filters
 print(f"Setting filters ... ")
 WebDriverWait(browser, timeout=10).until(
-    expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "field_select_links.small"))
-)
+    expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "field_select_links.small")))
 date_filter = browser.find_elements(By.CLASS_NAME, "field_select_links.small")
 date_filter[1].click()
 date_today = browser.find_element(By.CLASS_NAME, "field_select_links.small.open")
@@ -60,14 +59,14 @@ print(f"URL  : {browser.current_url}.")
 print("Total offers", post_amount)
 print("Pages", page_index)
 page = 1
-graphic = ['·    ','··   ','···  ','···· ','·····']
+graphic = ['·····','     ','·    ','··   ','···  ']
 
 
 # Crawling the url --------------------------------------------------------------------------------
 while (True):
-
-    scroll = 0
-    post_number = 0
+    
+    errors = list()
+    scroll = 160
     # clicking over the annoying suggestion alert
     web_popup = browser.find_element(By.ID, "pop-up-webpush-sub")
     web_popup = web_popup.find_elements(By.TAG_NAME, "button")[0]
@@ -78,31 +77,44 @@ while (True):
     post_box = browser.find_element(By.ID, "offersGridOfferContainer")
     posts = post_box.find_elements(By.TAG_NAME, "article")
 
-    for post in posts:
-        # selecting the next post
-        post_number += 1
+    for (idx, post) in enumerate(posts):
+
+        # rolling graphic
+        print(f"\rL Scrapping Status [{page}/{page_index}] {graphic[(idx-1)%5]}", end='')
+        # following clicks and scrolling down
+        browser.execute_script(f"arguments[0].scrollTo(0, {scroll*idx})", post_box)
+
+        # selecting the current or next post
         post.click()
+
         # waiting for important tags
-        WebDriverWait(browser, timeout=10).until(
-            expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "box_offer"))#'post details'
-        )
-        WebDriverWait(browser, timeout=10).until(
-            expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "box_detail"))#'apply' button, crucial to check intern data is available
-        )
-        WebDriverWait(browser, timeout=10).until(
-            expected_conditions.text_to_be_present_in_element((By.CLASS_NAME, "b_primary.big"), "Postularme")
-        )
-        # grabbing the data
-        post_detail = browser.find_element(By.CLASS_NAME, "box_detail")
+        try:
+            WebDriverWait(browser, timeout=10).until(
+                expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "box_offer")))
+            # 'post details'
+            WebDriverWait(browser, timeout=10).until(
+                expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "box_detail")))
+            # 'apply to' button, crucial to check intern data is available
+            WebDriverWait(browser, timeout=10).until(
+                expected_conditions.text_to_be_present_in_element((By.CLASS_NAME, "b_primary.big"), "Postularme"))
+        except:
+            error_id = browser.current_url.split('#')[-1]
+            errors.append(error_id) 
+            continue
 
+        # Acquiring generic data about the post
         post_id = browser.current_url.split('#')[-1]
-
-        post_title = post_detail.find_element(By.CLASS_NAME, "title_offer.fs21.fwB.lh1_2").text
-
+        post_title = post.find_element(By.CLASS_NAME, "js-o-link.fc_base").text
+        post_detail = browser.find_element(By.CLASS_NAME, "box_detail")
+        
+        # grabbing the inner data
         place = post_detail.find_element(By.CLASS_NAME, "mb5.mt5.fs16").find_elements(By.TAG_NAME, "span")[-1]
         place = place.text.split(',')
-        post_department = place[0] if (place[0]!='Bogotá') else 'Cundinamarca' 
-        post_city = place[1] if (place[1]!=' D.C.') else 'Bogotá'
+        post_department = null
+        post_city = null
+        if (len(place) > 1):
+            post_department = place[0] if (place[0]!='Bogotá') else 'Cundinamarca' 
+            post_city = place[1] if (place[1]!=' D.C.') else 'Bogotá'
 
         labels = post_detail.find_elements(By.CLASS_NAME, "tag.base.mb10")
         post_type = labels[-1].text if (('remoto' in labels[-1].text.lower()) | ('presencial' in labels[-1].text.lower())) else null
@@ -138,11 +150,6 @@ while (True):
 
         timeStamp = partition_date
 
-        # following clicks and scrolling down
-        scroll += 140
-        browser.execute_script(f"arguments[0].scrollTo(0, {scroll})", post_box)
-        #rolling graphic
-        print(f"\rL Scrapping Status [{page}/{page_index}] {graphic[post_number%5]}", end='')
         # appending the data collected in page
         #['id','title','city','department','type','postDate','timeStamp','company','salary','education','age','experience','description']
         shift_data.append(
@@ -164,11 +171,15 @@ while (True):
         )
         # end for ----------
 
-    # saving partition DataFrame
-    print("[OK] ", end='')
+    # diagnostic info
+    print(f"[Page Terminated] Errors: {len(errors)}. ", end='')
     partition = partition.append(pandas.DataFrame(shift_data, columns=columns),
                                  ignore_index=True)
     print("size:", partition.size, "bytes, shape:", partition.shape, "RowxCol.")
+    for (i, error) in enumerate(errors):
+        print(f"\t\t\tError {i}, postId: {error}")
+
+    # saving partition DataFrame
     partition.to_csv(
         path_or_buf=f'data/data{partition_date}.csv.gz',
         mode='w',
@@ -179,6 +190,8 @@ while (True):
         compression='gzip')
     # empty the shift_data temporal array
     shift_data.clear()
+    del errors
+
     # clicking the 'next' button
     try:
         WebDriverWait(browser, timeout=10).until(

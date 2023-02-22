@@ -2,10 +2,11 @@ import pandas, os, datetime
 print()
 
 
-data_dir = os.listdir('data/')
-old_partitions = list()
-new_partition = str()
 today = datetime.date.today()
+old_partitions = list() 
+new_partition : str
+
+data_dir = os.listdir('data/')
 
 for file in data_dir:
     if ('csv' in file) & (f'{today}' in file):

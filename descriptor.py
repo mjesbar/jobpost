@@ -25,9 +25,12 @@ def describe(ls:list):
 def upload_s3():
     
     s3 = boto3.client('s3')
-    response = s3.put_object(Body=f'data/{new_partition}',
+    new_partition_binary = open(f"data/{new_partition}", 'rb')
+
+    response = s3.put_object(Body=new_partition_binary,
                              Bucket='jobpost-project',
-                             Key=f'{new_partition}')
+                             Key=f'{new_partition}',
+                             ContentType='gzip')
     return str(response)
 
 

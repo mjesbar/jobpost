@@ -24,7 +24,7 @@ if (__name__ == "__main__"):
     chrome_options.page_load_strategy = 'normal'
     chrome_options.add_argument('--user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"')
     chrome_options.add_argument('--start-in-incognito')
-    #chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--headless')
     chrome_options.add_argument('--window-position=544,0')
     chrome_options.add_argument('--window-size=1376,1080')
     chrome_options.add_argument('--disable-gpu')

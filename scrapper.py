@@ -28,23 +28,23 @@ chrome_options.add_argument('--window-position=544,0')
 chrome_options.add_argument('--window-size=1376,1080')
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-extensions')
+chrome_options.add_argument('--disable-2d-canvas-clip-aa')
+chrome_options.add_argument('--disable-2d-canvas-image-chromium')
+chrome_options.add_argument('--disable-3d-apis')
 
 # going toward the target url
 browser = webdriver.Chrome(options=chrome_options)
 
-# starting the search
-URL = 'https://co.computrabajo.com/trabajo-de-datos'
-browser.get(URL)
 
 # setting filters
 print(f"Setting filters ... ")
-WebDriverWait(browser, timeout=10).until(
-    expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "field_select_links.small")))
-date_filter = browser.find_elements(By.CLASS_NAME, "field_select_links.small")
-date_filter[1].click()
-date_today = browser.find_element(By.CLASS_NAME, "field_select_links.small.open")
-date_today = date_today.find_elements(By.CLASS_NAME, "buildLink")
-date_today[1].click()
+datetoday_urlparameter = 'pubdate=1'
+order_urlparameter = 'by=publicationtime'
+root_url = 'https://co.computrabajo.com/trabajo-de-datos'
+
+# starting the search
+URL = f"{root_url}?{datetoday_urlparameter}&{order_urlparameter}"
+browser.get(URL)
 
 # getting the total offers found
 post_grid = browser.find_element(By.ID, "offersGridOfferContainer")
@@ -59,7 +59,7 @@ print(f"URL  : {browser.current_url}.")
 print("Total offers", post_amount)
 print("Pages", page_index)
 page = 1
-graphic = ['·····','     ','·    ','··   ','···  ']
+graphic = ['·   ','··  ','··· ','····','    ']
 
 
 # Crawling the url --------------------------------------------------------------------------------
@@ -78,9 +78,8 @@ while (True):
     posts = post_box.find_elements(By.TAG_NAME, "article")
 
     for (idx, post) in enumerate(posts):
-
         # rolling graphic
-        print(f"\rL Scrapping Status [{page}/{page_index}] {graphic[(idx-1)%5]}", end='')
+        print(f"\rL Scrapping Status [{page}/{page_index}] {graphic[idx%5]}", end='')
         # following clicks and scrolling down
         browser.execute_script(f"arguments[0].scrollTo(0, {scroll*idx})", post_box)
 
@@ -106,7 +105,14 @@ while (True):
         post_id = browser.current_url.split('#')[-1]
         post_title = post.find_element(By.CLASS_NAME, "js-o-link.fc_base").text
         post_detail = browser.find_element(By.CLASS_NAME, "box_detail")
+        post_date = post.find_element(By.CLASS_NAME, "fs13.fc_aux").text
+        print(" ", post_id, "\t\t",end='')
         
+        # today alternative filter, only grab the data from today's post
+        if ('minuto' not in post_date) & ('hora' not in post_date):
+            continue
+        time.sleep(0.25)
+
         # grabbing the inner data
         place = post_detail.find_element(By.CLASS_NAME, "mb5.mt5.fs16").find_elements(By.TAG_NAME, "span")[-1]
         place = place.text.split(',')
@@ -119,8 +125,6 @@ while (True):
         labels = post_detail.find_elements(By.CLASS_NAME, "tag.base.mb10")
         post_type = labels[-1].text if (('remoto' in labels[-1].text.lower()) | ('presencial' in labels[-1].text.lower())) else null
         post_salary = labels[0].text if ('$' in labels[0].text) else null
-
-        post_date = post_detail.find_element(By.CLASS_NAME, "fc_aux.fs13").text
 
         post_company = post_detail.find_element(By.CLASS_NAME, "mb5.mt5.fs16")
         try: post_company = post_company.find_element(By.TAG_NAME, "a").text
@@ -172,7 +176,7 @@ while (True):
         # end for ----------
 
     # diagnostic info
-    print(f"[Page Terminated] Errors: {len(errors)}. ", end='')
+    print(f"[OK] Errors: {len(errors)}. ", end='')
     partition = partition.append(pandas.DataFrame(shift_data, columns=columns),
                                  ignore_index=True)
     print("size:", partition.size, "bytes, shape:", partition.shape, "RowxCol.")
@@ -195,8 +199,7 @@ while (True):
     # clicking the 'next' button
     try:
         WebDriverWait(browser, timeout=10).until(
-            expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "b_primary.w48.buildLink.cp")),
-        )
+            expected_conditions.presence_of_all_elements_located((By.CLASS_NAME, "b_primary.w48.buildLink.cp")))
     except:
         print("that's all bro")
         break

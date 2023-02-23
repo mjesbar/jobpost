@@ -190,7 +190,7 @@ if (__name__ == "__main__"):
                          index=False)
         partition.to_parquet(path=f'data/batch-jobpost{partition_date}.gz.parquet',
                              engine='pyarrow',
-                             compression='gzip',
+                             compression='snappy',
                              index=False)
         # empty the shift_data temporal array
         shift_data.clear()

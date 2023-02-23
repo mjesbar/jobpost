@@ -28,8 +28,8 @@ def upload_s3():
 
     response = s3.put_object(Body=new_partition_binary,
                              Bucket='jobpost-project',
-                             Key=f'{new_partition}',
-                             ContentType='gzip')
+                             Key=f'raw/{new_partition}',
+                             ContentType='parquet')
     return response
 
 
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     new_partition = describe(data_dir)
     print()
 
-    print("Uploading today's file to s3://jobpost-project/ S3 bucket ... ")
+    print("Uploading today's file to s3://jobpost-project/raw/ S3 bucket ... ")
     response_object = upload_s3()
     print("StatusCode:", response_object['ResponseMetadata']['HTTPStatusCode'])
     print("partition object uploaded:", new_partition)

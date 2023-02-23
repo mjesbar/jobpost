@@ -5,19 +5,17 @@ from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+# configurations
+warnings.filterwarnings('ignore')
 
 
 if (__name__ == "__main__"):
-    # configurations
-    warnings.filterwarnings('ignore')
-
 
     columns = ['id','title','city','department','type','postDate','timeStamp','company','salary','education','age','experience','description']
     partition_date = datetime.date.today()
     partition = pandas.DataFrame(columns=columns)
     shift_data = list()
     null = numpy.nan
-
 
     # Creating the driver instance ------------------------------------------------------------------
     chrome_options = ChromeOptions()

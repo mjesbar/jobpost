@@ -79,7 +79,7 @@ if (__name__ == "__main__"):
 
         for (idx, post) in enumerate(posts):
             # rolling graphic
-            print(f"\rL Scrapping Status [{page}/{page_index}] {graphic[idx%5]}", end='')
+            print(f"\rL Scraping Status page:[{page}/{page_index}] {graphic[idx%5]} ", end='')
             # following clicks and scrolling down
             browser.execute_script(f"arguments[0].scrollTo(0, {scroll*idx})", post_box)
 
@@ -106,7 +106,7 @@ if (__name__ == "__main__"):
             post_title = post.find_element(By.CLASS_NAME, "js-o-link.fc_base").text
             post_detail = browser.find_element(By.CLASS_NAME, "box_detail")
             post_date = post.find_element(By.CLASS_NAME, "fs13.fc_aux").text
-            print(" ", post_id, "\t\t",end='')
+            print(" PostId:", post_id, "\t",end='')
             
             # today alternative filter, only grab the data from today's post
             if ('minuto' not in post_date) & ('hora' not in post_date):
@@ -181,14 +181,14 @@ if (__name__ == "__main__"):
                                      ignore_index=True)
         print("size:", partition.size, "bytes, shape:", partition.shape, "RowxCol.")
         for (i, error) in enumerate(errors):
-            print(f"\t\t\tError {i}, postId: {error}")
+            print(f"\t\tL@ Error {i+1}, postId: {error}")
 
         # saving partition DataFrame
-        partition.to_csv(path_or_buf=f'data/data{partition_date}.csv.gz',
+        partition.to_csv(path_or_buf=f'data/batch-jobpost{partition_date}.csv.gz',
                          mode='w',
                          compression={'method': 'gzip'},
                          index=False)
-        partition.to_parquet(path=f'data/data{partition_date}.parquet.gz',
+        partition.to_parquet(path=f'data/batch-jobpost{partition_date}.gz.parquet',
                              engine='pyarrow',
                              compression='gzip',
                              index=False)

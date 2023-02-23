@@ -1,5 +1,4 @@
-from hashlib import new
-import pandas, os, datetime
+import pandas, os, datetime, json
 import boto3
 print()
 
@@ -9,13 +8,13 @@ def describe(ls:list):
     partition = str()
 
     for file in data_dir:
-        if ('csv' in file) & (f'{today}' in file):
+        if ('parquet' in file) & (f'{today}' in file):
             partition = file
             print("new partition:\n\t", partition)
-            print("==============================================\nold_partitions:")
 
+    print("==============================================\nold_partitions:")
     for file in data_dir:
-        if ('csv' in file) & (f'{today}' not in file):
+        if ('parquet' in file) & (f'{today}' not in file):
             old_partitions.append(file)
             print("\t",old_partitions[-1])
 
@@ -31,7 +30,7 @@ def upload_s3():
                              Bucket='jobpost-project',
                              Key=f'{new_partition}',
                              ContentType='gzip')
-    return str(response)
+    return response
 
 
 if __name__ == "__main__":
@@ -46,6 +45,7 @@ if __name__ == "__main__":
     print()
 
     print("Uploading today's file to s3://jobpost-project/ S3 bucket ... ")
-    print(new_partition)
-    upload_s3()
+    response_object = upload_s3()
+    print("StatusCode:", response_object['ResponseMetadata']['HTTPStatusCode'])
+    print("partition object uploaded:", new_partition)
 

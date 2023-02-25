@@ -1,13 +1,11 @@
-from re import A
 import pandas, os, datetime, json
 import boto3
-from pandas.core.dtypes.common import classes
 print()
 
 
 def describe(ls:list):
     """
-    fDescription:
+    Description:
     list the batches that we've already saved from scraping.
     """
     partition = str()
@@ -26,10 +24,9 @@ def describe(ls:list):
     return partition
 
 
-
 def upload_s3():
     """
-    fDescription: 
+    Description: 
     upload using the low-level API function from boto3 with a S3 client.
     """    
     s3 = boto3.client('s3')
@@ -42,11 +39,11 @@ def upload_s3():
     return response
 
 
-
 class StatusCodeError(Exception):
-    def __init__(self, message) -> None:
-        self.message = "the opoeration has returned an error status code"
-        super().__init__(self.message)
+    def __init__(self) -> None:
+        self.message = "the operation has returned an error status code"
+    def __str__(self) -> str:
+        return f"{self.message}"
 
 
 
@@ -63,12 +60,13 @@ if __name__ == "__main__":
     new_partition = describe(data_dir)
     print()
 
-    print("Uploading today's file to s3://jobpost-project/raw/ S3 bucket ... ", end='')
+    print("Uploading today's file to s3://jobpost-project/raw/ S3 bucket ... ")
     response = upload_s3()
     response_status = response['ResponseMetadata']['HTTPStatusCode']
     if (response_status == 200):
-        print(" -> ", response_status)
+        print(f"\t-> [{response_status}] Succesfully uploaded!")
     else:
-        raise StatusCodeError(" -> StatusCodeError")
-    print("PartitionObject just uploaded:", new_partition)
+        raise StatusCodeError()
+
+    print(f"PartitionObject just uploaded: {new_partition}")
 

@@ -182,14 +182,15 @@ if (__name__ == "__main__"):
             print(f"\t\tL@ Error {i+1}, postId: {error}")
 
         # saving partition DataFrame
-        partition.to_csv(path_or_buf=f'data/batch-jobpost{partition_date}.csv.gz',
+        partition.to_csv(path_or_buf=f'data/batch-jobpost{partition_date}.gz.csv',
                          mode='w',
                          compression={'method': 'gzip'},
                          index=False)
         partition.to_parquet(path=f'data/batch-jobpost{partition_date}.gz.parquet',
                              engine='pyarrow',
-                             compression='snappy',
+                             compression='gzip',
                              index=False)
+
         # empty the shift_data temporal array
         shift_data.clear()
         del errors

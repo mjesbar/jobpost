@@ -16,7 +16,6 @@ def lambda_handler():
     s3client = boto3.client("s3")
     response = s3client.list_objects(Bucket="jobpost-project", Marker=raw_folder_key)
     response_content = response.get("Contents")
-    #print(json.dumps(response_content, indent=4, default=str))
 	# getting the file names
     for element in response_content:
         keys.append(element.get("Key"))
@@ -24,10 +23,10 @@ def lambda_handler():
     dataframe = module.merge_df(dataframe, keys, s3client, bucket_name)
 
     # Tranformations - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
+    print(dataframe.tail(10))
 
     # uploading tranformed 'dataframe'
-    module.upload_df(dataframe, s3client, bucket_name, target_folder_key)
+    #upload_response = module.upload_df(dataframe, s3client, bucket_name, target_folder_key)
 
 
 lambda_handler()

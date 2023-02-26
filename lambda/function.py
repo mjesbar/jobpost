@@ -1,58 +1,35 @@
-	#!/usr/bin/env python3.9
+#!/usr/bin/env python3.9
 
-import io
-import pandas
-import json
-import boto3
-import module
+import io, pandas, json, boto3, module, time
 print()
 
-def lambda_handler():
+bucket_name = "jobpost-project"
+raw_folder_key = "raw/"
+target_folder_key = "processed/"
 
-    bucket_name = "jobpost-project"
-    raw_folder_key = "raw/"
-    target_folder_key = "processed/"
+def lambda_handler():
+    
     keys = list()
     dataframe = pandas.DataFrame()
-
-	# getting list the 'raw/' in 'jobpost-project' bucket
+	
+    # getting list the 'raw/' in 'jobpost-project' bucket
     s3client = boto3.client("s3")
     response = s3client.list_objects(Bucket="jobpost-project", Marker=raw_folder_key)
-
-	# ispecting the content key
     response_content = response.get("Contents")
-
+    #print(json.dumps(response_content, indent=4, default=str))
 	# getting the file names
     for element in response_content:
         keys.append(element.get("Key"))
+    # merging all the parquet partitions on bucket
+    dataframe = module.merge_df(dataframe, keys, s3client, bucket_name)
 
-	# getting the binaries and append to 'dataframe'
-    for (n,key) in enumerate(keys):
-        object_response = s3client.get_object(Bucket=bucket_name,
-                                   Key=key)
-        status = object_response.get("ResponseMetadata").get("HTTPStatusCode")
-        object_body = object_response.get("Body")
-        if (n < 1):
-            parquet_file = module.s3object_to_binary(object_body)
-            dataframe = pandas.read_parquet(parquet_file, engine="pyarrow")
-            print(dataframe.shape)
-        else:
-            parquet_file = module.s3object_to_binary(object_body)
-            df = pandas.read_parquet(parquet_file, engine="pyarrow")
-            dataframe = pandas.concat([dataframe, df], ignore_index=True, verify_integrity=True)
-            print(dataframe.shape)
-	#end for
-    
-    print(dataframe.count() * dataframe.memory_usage())
+    # Tranformations - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 
-	# 'dataframe' tranformations -----------------------------------------------------------------------------
-    
+    # uploading tranformed 'dataframe'
+    module.upload_df(dataframe, s3client, bucket_name, target_folder_key)
 
-    # tranformed 'dataframe' upload
-    module.upload(dataframe, s3client, bucket_name, target_folder_key)
 
 lambda_handler()
-
 
 

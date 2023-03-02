@@ -30,32 +30,18 @@
             "MySQL",
             "PostgreSQL",
             "SQL server",
-            "Pandas",
-            "Matplotlib",
-            "Numpy",
-            "ETL",
+            "T-SQL",
             "AWS",
             "Azure",
             "GCP",
             "Excel",
-            "Power Point",
+            "PowerPoint",
             "Word",
             "Power BI",
+            "QlickSense",
             "Tableu",
             "SAP",
             "Oracle"
-        ],
-        "services": [
-            "S3",
-            "Lambda",
-            "EC2",
-            "Glue",
-            "Redshift",
-            "RDS",
-            "DynamoDB",
-            "Athena",
-            "Bigquery",
-            "Cloud Storage"
         ]
     }
 }

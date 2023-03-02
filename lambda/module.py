@@ -1,11 +1,12 @@
+import io, os, boto3, base64
+from pandas import DataFrame, Index, Series, read_parquet, read_csv, concat
+from botocore.response import StreamingBody
+
+
 """
-    this module provide the custom function used to ease the data streaming 
+    this module provide the custom function used to ease along the data streaming and 
     manipulation overall.
 """
-
-import io, os, boto3
-from pandas import DataFrame, read_parquet, read_csv, concat
-from botocore.response import StreamingBody
 
 
 def s3object_bytes(obj : StreamingBody):
@@ -50,4 +51,20 @@ def merge_df(df : DataFrame, keys : list[str], s3, bucket):
     print("\rRows Appended", df.shape[0])
 
     return df
-               
+
+
+def map_df(df : DataFrame, column : str, tags : Index):
+    # mapping 'map_columns' through df column
+    df_content = df['description']
+    for str_encoded in df_content:
+        post_str = base64.b64decode(str_encoded)
+        post_str = post_str.decode('utf8')
+    
+    return 0
+
+
+   
+
+
+
+

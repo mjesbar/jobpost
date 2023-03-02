@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.9
 from datetime import datetime
-from itertools import count
 import boto3, module, pandas
 import os, io, json, base64, re
 print()
@@ -20,36 +19,34 @@ def lambda_handler(event, context):
     
     keys = list()
     tags = json.load(open("./tags.json", "r"))['tags']
-    dataframe = pandas.DataFrame()
     languages_columns = list(['Id']) + tags['languages']
     software_columns = list(['Id']) + tags['softwares']
-    languages_df = pandas.DataFrame(columns=languages_columns)
-    softwares_df = pandas.DataFrame(columns=software_columns)
+    dataframe = pandas.DataFrame()
+    languages = pandas.DataFrame()
+    softwares = pandas.DataFrame()
 
     # Ingestion
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
     # getting list the 'raw/' in 'jobpost-project' bucket
-    s3client = boto3.client("s3")
-    response = s3client.list_objects(Bucket="jobpost-project", Marker=raw_folder_key)
-    response_content = response.get("Contents")
-	# getting the file names
-    for element in response_content:
-       keys.append(element.get("Key"))
-    # merging all the parquet partitions on bucket
-    dataframe = module.merge_df(dataframe, keys, s3client, bucket_name)
+    #s3client = boto3.client("s3")
+    #response = s3client.list_objects(Bucket="jobpost-project", Marker=raw_folder_key)
+    #response_content = response.get("Contents")
+    #for element in response_content:
+       #keys.append(element.get("Key"))
+    #dataframe = module.merge_partitions(dataframe, keys, s3client, bucket_name)
 
 #tmp test
-    #ls_data = os.listdir("../data/")
-    #ls_data_filtered = filter(lambda x: 'parquet' in x, ls_data)
-    #ls = list(ls_data_filtered)
+    ls_data = os.listdir("../data/")
+    ls_data_filtered = filter(lambda x: 'parquet' in x, ls_data)
+    ls = list(ls_data_filtered)
 
-    #for file in ls:
-        #tmp = f"../data/{file}"
-        #tmpdf = pandas.read_parquet(tmp)
-        #dataframe = pandas.concat([dataframe, tmpdf], ignore_index=True, )
+    for file in ls:
+        tmp = f"../data/{file}"
+        tmpdf = pandas.read_parquet(tmp)
+        dataframe = pandas.concat([dataframe, tmpdf], ignore_index=True, )
     
-    print("Rows collected", dataframe.shape[0])
+    #print("Rows collected", dataframe.shape[0])
 
     # Tranformation
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -72,7 +69,7 @@ def lambda_handler(event, context):
         dataframe['education'].mask(
             dataframe['education'].str.match(fr".*{token}.*"), token, inplace=True)
     dataframe['education'].fillna(pandas.NA, inplace=True)
-    mask_profesional = dataframe['description'].str.match(r".*(especialista+|profesional|conocimientos+|sólidos+).*")
+    mask_profesional = dataframe['description'].str.match(r".*(especialista|profesional|conocimientos|sólidos)+.*")
     mask_bachilller = dataframe['description'].str.match(r".*(bachiller+|con+.?o?.?sin+.experiencia+).*")
     dataframe['education'].mask(
         (mask_profesional) & (dataframe['education']==''), tokens[2], inplace=True)
@@ -123,7 +120,11 @@ def lambda_handler(event, context):
         dataframe['english']==True, 'required', inplace=True)
     dataframe['english'].mask(
         dataframe['english']==False, 'non-required', inplace=True)
-    
+
+    # mapping 'languages' and 'softwares' dataframes
+    languages = module.tag_df(dataframe, pk='id', search='description', tags=languages_columns)
+    print(languages.loc[languages['Python']==True, ['Id','Python']])
+
     # dropping useless columns
     posters = dataframe.drop(columns=['title','postDate'])
     del dataframe
@@ -133,8 +134,7 @@ def lambda_handler(event, context):
     description_base64 = list(posters['description'])
     description_base64 = map(lambda x: x.encode('utf_8'), description_base64)
     description_base64 = map(lambda x: base64.b64encode(x), description_base64)
-    posters['description'] = pandas.Series(data=list(description_base64),
-                                           index=description_base64_index)
+    posters['description'] = pandas.Series(data=list(description_base64), index=description_base64_index)
 
     # converting column dtypes from prior schema
     schema = json.load(open("./schema.json", "r"))
@@ -144,16 +144,15 @@ def lambda_handler(event, context):
     posters[['description','english']] = posters[['english','description']]
     posters.rename(columns={"description": "english", "english": "description"}, inplace=True)
 
-    print("Rows after ETL", posters.shape[0])
-    print(posters.info())
+    #print("Rows after ETL", posters.shape[0])
+    #print(posters.info())
 
 
-    #module.map_df(dataframe, 'description', languages_df.columns)
 
     # Loads - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     # uploading tranformed 'dataframe'
-    upload_response = module.upload_df(posters, s3client, bucket_name, target_folder_key)
+    #upload_response = module.upload_df(posters, s3client, bucket_name, target_folder_key)
 
 
 

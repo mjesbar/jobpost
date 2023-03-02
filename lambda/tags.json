@@ -12,7 +12,7 @@
             "R",
             "Ruby",
             "C",
-            "C++",
+            "Cpp",
             "Matlab",
             "TypeScript",
             "Scala",
@@ -24,6 +24,7 @@
             "Perl"
         ],
         "softwares": [
+            "Git",
             "Hadoop",
             "Spark",
             "Kafka",

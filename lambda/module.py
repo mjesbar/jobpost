@@ -1,4 +1,4 @@
-import io, os, boto3, base64
+import io, os, boto3, base64, re
 from pandas import DataFrame, Index, Series, read_parquet, read_csv, concat
 from botocore.response import StreamingBody
 
@@ -34,7 +34,7 @@ def upload_df(data : DataFrame, s3client, bucket, target_path):
     return response
             
 
-def merge_df(df : DataFrame, keys : list[str], s3, bucket):
+def merge_partitions(df : DataFrame, keys : list[str], s3, bucket):
 	# getting the binaries and append to 'df'
     for (n,key) in enumerate(keys):
         object_response = s3.get_object(Bucket=bucket, Key=key)
@@ -53,18 +53,16 @@ def merge_df(df : DataFrame, keys : list[str], s3, bucket):
     return df
 
 
-def map_df(df : DataFrame, column : str, tags : Index):
+def tag_df(df : DataFrame, pk : str, search : str, tags : list[str]):
     # mapping 'map_columns' through df column
-    df_content = df['description']
-    for str_encoded in df_content:
-        post_str = base64.b64decode(str_encoded)
-        post_str = post_str.decode('utf8')
-    
-    return 0
+    source = df[search]
+    pk_column = df[pk]
+    result = DataFrame(columns=tags)
+    result['Id'] = pk_column
+    for tag in tags[1:]:
+        result[tag] = source.str.match(fr".* \(?{tag.lower()}+\)?\.?\,? .*")
 
-
-   
-
+    return result
 
 
 

@@ -1,13 +1,22 @@
 {
-    "id": "string",
-    "city": "string",
-    "department": "string",
-    "type": "string",
-    "timeStamp": "datetime64",
-    "company": "string",
-    "salary": "int32",
-    "education": "string",
-    "age": "int8",
-    "experience": "int8",
-    "description": "string"
+    "posters": {
+        "id": "string",
+        "city": "string",
+        "department": "string",
+        "type": "string",
+        "timeStamp": "datetime64",
+        "company": "string",
+        "salary": "Int32",
+        "education": "string",
+        "age": "string",
+        "experience": "Int16",
+        "description": "string",
+        "english": "string"
+    },
+    "languages": {
+
+    },
+    "softwares": {
+
+    }
 }

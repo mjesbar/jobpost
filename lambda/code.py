@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.9
+
 from datetime import datetime
 import boto3, module, pandas
 import os, io, json, base64, re
@@ -155,18 +156,20 @@ def lambda_handler(event, context):
 
     # uploading tranformed 'dataframe'
     upload_posters_response = module.upload_df(posters, s3client=s3client,
-                                               bucket=bucket_name, save_key=f"{target_folder}posterTable/posters")
+                                               bucket=bucket_name, save_key=f"{target_folder}postersTable/posters")
     upload_languages_response = module.upload_df(languages, s3client=s3client,
                                                bucket=bucket_name, save_key=f"{target_folder}languagesTable/languages")
     upload_softwares_response = module.upload_df(softwares, s3client=s3client,
                                                bucket=bucket_name, save_key=f"{target_folder}softwaresTable/softwares")
 
-    return "\
+    exit_handler = "\
         Uploading ... \n\
         > Posters DataFrame\t\", upload_posters_response['ResponseMetadata']['HTTPStatusCode'] \n\
         > Languages DataFrame\t\", upload_languages_response['ResponseMetadata']['HTTPStatusCode'] \n\
         > Softwares DataFrame\t\", upload_softwares_response['ResponseMetadata']['HTTPStatusCode'] \
         "
+
+    return exit_handler
 
 lambda_handler(1,1)
 

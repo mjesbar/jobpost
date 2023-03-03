@@ -144,7 +144,11 @@ def lambda_handler(event, context):
     posters[['description','english']] = posters[['english','description']]
     posters.rename(columns={"description": "english", "english": "description"}, inplace=True)
 
-    print("Rows after ETL", posters.shape[0])
+    # info about the ETL
+    print("Rows after ETL\n"
+          "\tPosters:", posters.shape[0], "\n",
+          "\tLanguages:", languages.shape[0], "\n",
+          "\tSoftwares:", softwares.shape[0], "\n")
     print(posters.info())
 
     # Loads - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

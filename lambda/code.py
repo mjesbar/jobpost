@@ -70,8 +70,8 @@ def lambda_handler(event, context):
         dataframe['education'].mask(
             dataframe['education'].str.match(fr".*{token}.*"), token, inplace=True)
     dataframe['education'].fillna(pandas.NA, inplace=True)
-    mask_profesional = dataframe['description'].str.match(r".*(especialista|profesional|conocimientos|sólidos)+.*")
-    mask_bachilller = dataframe['description'].str.match(r".*(bachiller+|con+.?o?.?sin+.experiencia+).*")
+    mask_profesional = dataframe['description'].str.match(r"(\n|.)*(especialista|profesional|conocimientos|sólidos)+(\n|.)*")
+    mask_bachilller = dataframe['description'].str.match(r"(\n|.)*(bachiller+|con+.?o?.?sin+.experiencia+)(\n|.)*")
     dataframe['education'].mask(
         (mask_profesional) & (dataframe['education']==''), tokens[2], inplace=True)
     dataframe['education'].mask(
@@ -94,10 +94,10 @@ def lambda_handler(event, context):
     dataframe['age'].fillna('non-specific', inplace=True)
 
     # cleaning type
-    mask_type_hybrid1 = dataframe['description'].str.match(r".*(hibrido|[p|P]resencial y remoto)+.*")
+    mask_type_hybrid1 = dataframe['description'].str.match(r"(\n|.)*(hibrido|[p|P]resencial y remoto)+(\n|.)*")
     mask_type_hybrid2 = dataframe['type'].str.match(r"^([h|H]ibrido|[p|P]resencial y remoto)+.*")
     mask_type_hybrid = mask_type_hybrid1 | mask_type_hybrid2
-    mask_type_remote1 = dataframe['description'].str.match(r".*(remoto+).*")
+    mask_type_remote1 = dataframe['description'].str.match(r"(\n|.)*(remoto+)(\n|.)*")
     mask_type_remote2 = dataframe['type'].str.match(r"^([r|R]emoto+).*")
     mask_type_remote = mask_type_remote1 | mask_type_remote2
     dataframe['type'].mask(
@@ -116,7 +116,7 @@ def lambda_handler(event, context):
 
     # tagging english skill
     dataframe['english'] = dataframe['description'].str.match(
-        r".*(advanced|english|ingl[e|é]s|experience|level|work|knowledge|team|skill.?)+.*")
+        r"(\n|.)*(advanced|english|ingl[e|é]s|experience|level|work|knowledge|team|skill.?)+(\n|.)*")
     dataframe['english'].mask(
         dataframe['english']==True, 'required', inplace=True)
     dataframe['english'].mask(
@@ -136,7 +136,7 @@ def lambda_handler(event, context):
     description_base64 = map(lambda x: base64.b64encode(x), description_base64)
     posters['description'] = pandas.Series(data=list(description_base64), index=description_base64_index)
 
-    # converting column dtypes from prior schema
+    # converting column dtypes of posters dataframe
     schema = json.load(open("./schema.json", "r"))
     posters = posters.astype(schema.get("posters"))
     
@@ -155,11 +155,11 @@ def lambda_handler(event, context):
 
     # uploading tranformed 'dataframe'
     upload_posters_response = module.upload_df(posters, s3client=s3client,
-                                               bucket=bucket_name, save_key=f"{target_folder}posters")
+                                               bucket=bucket_name, save_key=f"{target_folder}posterTable/posters")
     upload_languages_response = module.upload_df(languages, s3client=s3client,
-                                               bucket=bucket_name, save_key=f"{target_folder}languages")
+                                               bucket=bucket_name, save_key=f"{target_folder}languagesTable/languages")
     upload_softwares_response = module.upload_df(softwares, s3client=s3client,
-                                               bucket=bucket_name, save_key=f"{target_folder}softwares")
+                                               bucket=bucket_name, save_key=f"{target_folder}softwaresTable/softwares")
 
     print("Uploading ... ")
     print(" > Posters DataFrame\t", upload_posters_response['ResponseMetadata']['HTTPStatusCode'])

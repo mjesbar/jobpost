@@ -1,0 +1,62 @@
+[
+    {
+        "Name": "id",
+        "Type": "string",
+        "Comment": ""
+    },
+    {
+        "Name": "city",
+        "Type": "string",
+        "Comment": ""
+    },
+    {
+        "Name": "department",
+        "Type": "string",
+        "Comment": ""
+    },
+    {
+        "Name": "type",
+        "Type": "string",
+        "Comment": ""
+    },
+    {
+        "Name": "timeStamp",
+        "Type": "timestamp",
+        "Comment": ""
+    },
+    {
+        "Name": "company",
+        "Type": "string",
+        "Comment": ""
+    },
+    {
+        "Name": "salary",
+        "Type": "int",
+        "Comment": ""
+    },
+    {
+        "Name": "education",
+        "Type": "string",
+        "Comment": ""
+    },
+    {
+        "Name": "age",
+        "Type": "string",
+        "Comment": ""
+    },
+    {
+        "Name": "experience",
+        "Type": "tinyint",
+        "Comment": ""
+    },
+    {
+        "Name": "english",
+        "Type": "string",
+        "Comment": ""
+    },
+    {
+        "Name": "description",
+        "Type": "string",
+        "Comment": ""
+    }
+]

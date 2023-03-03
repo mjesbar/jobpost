@@ -13,10 +13,8 @@
         "description": "string",
         "english": "string"
     },
-    "languages": {
-
-    },
-    "softwares": {
-
-    }
+    "comments": [
+        "This json only bounds the on-premise posters schema",
+        "used in the lambda script at ETL process."
+    ]
 }

@@ -1,102 +1,107 @@
 [
     {
-        "Name": "",
-        "Type": "",
+        "Name": "id",
+        "Type": "string",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "javascript",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "python",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "go",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "java",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "kotlin",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "php",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "c#",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "swift",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "r",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "ruby",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "c++",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "matlab",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "typescript",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "scala",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "sql",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "html",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "css",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "nosql",
+        "Type": "boolean",
         "Comment": ""
     },
     {
-        "Name": "",
-        "Type": "",
+        "Name": "rust",
+        "Type": "boolean",
         "Comment": ""
     },
+    {
+        "Name": "perl",
+        "Type": "boolean",
+        "Comment": ""
+    }
 ]

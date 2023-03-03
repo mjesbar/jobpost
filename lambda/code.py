@@ -19,8 +19,8 @@ def lambda_handler(event, context):
     
     keys = list()
     tags = json.load(open("./tags.json", "r"))['tags']
-    languages_columns = list(['Id']) + tags['languages']
-    software_columns = list(['Id']) + tags['softwares']
+    languages_columns = list(['id']) + tags['languages']
+    software_columns = list(['id']) + tags['softwares']
     dataframe = pandas.DataFrame()
     languages = pandas.DataFrame()
     softwares = pandas.DataFrame()
@@ -161,13 +161,12 @@ def lambda_handler(event, context):
     upload_softwares_response = module.upload_df(softwares, s3client=s3client,
                                                bucket=bucket_name, save_key=f"{target_folder}softwaresTable/softwares")
 
-    print("Uploading ... ")
-    print(" > Posters DataFrame\t", upload_posters_response['ResponseMetadata']['HTTPStatusCode'])
-    print(" > Languages DataFrame\t", upload_languages_response['ResponseMetadata']['HTTPStatusCode'])
-    print(" > Softwares DataFrame\t", upload_softwares_response['ResponseMetadata']['HTTPStatusCode'])
-
-
-
+    return "\
+        Uploading ... \n\
+        > Posters DataFrame\t\", upload_posters_response['ResponseMetadata']['HTTPStatusCode'] \n\
+        > Languages DataFrame\t\", upload_languages_response['ResponseMetadata']['HTTPStatusCode'] \n\
+        > Softwares DataFrame\t\", upload_softwares_response['ResponseMetadata']['HTTPStatusCode'] \
+        "
 
 lambda_handler(1,1)
 

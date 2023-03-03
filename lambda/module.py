@@ -58,16 +58,18 @@ def merge_partitions(df : DataFrame, keys : list[str], s3, bucket):
 def tag_df(df : DataFrame, pk : str, search : str, tags : list[str]):
     # mapping 'map_columns' through df column
     source = df[search]
-    pk_column = df[pk]
     result = DataFrame(columns=tags)
-    result['Id'] = pk_column
+    result[pk] = df[pk]
+
+    tag = [tag_edit.lower() for tag_edit in tags]
+
     for tag in tags[1:]:
         if (tag == 'C#'):
             result[tag] = source.str.match(r"(\n|.)*\b(c\#{1}|\.?net)\b(\n|.)*", flags=re.IGNORECASE)
         elif (tag == 'C++'):
             result[tag] = source.str.match(r"(\n|.)*\b(c\+\+)+\b(\n|.)*", flags=re.IGNORECASE)
         else:
-            result[tag] = source.str.match(fr"(\n|.)*\b{tag.lower()}\b(\n|.)*", flags=re.IGNORECASE)
+            result[tag] = source.str.match(fr"(\n|.)*\b{tag}\b(\n|.)*", flags=re.IGNORECASE)
 
     return result
 

@@ -38,7 +38,7 @@ if (__name__ == "__main__"):
     print(f"Setting filters ... ")
     datetoday_urlparameter = 'pubdate=1'
     order_urlparameter = 'by=publicationtime'
-    root_url = 'https://co.computrabajo.com/empleos-de-informatica-y-telecom'
+    root_url = 'https://co.computrabajo.com/trabajo-de-programador'
 
     # starting the search
     URL = f"{root_url}?{datetoday_urlparameter}&{order_urlparameter}"
@@ -107,7 +107,7 @@ if (__name__ == "__main__"):
             print(" PostId:", post_id, "\t",end='')
             
             # today alternative filter, only grab the data from today's post
-            if ('minuto' in post_date) | ('hora' in post_date):
+            if (('minuto' not in post_date) & ('hora' not in post_date)):
                 continue
             time.sleep(0.25)
 

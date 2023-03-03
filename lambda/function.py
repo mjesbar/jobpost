@@ -46,7 +46,7 @@ def lambda_handler(event, context):
         tmpdf = pandas.read_parquet(tmp)
         dataframe = pandas.concat([dataframe, tmpdf], ignore_index=True, )
     
-    #print("Rows collected", dataframe.shape[0])
+    print("Rows collected", dataframe.shape[0])
 
     # Tranformation
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -55,8 +55,9 @@ def lambda_handler(event, context):
     dataframe.drop_duplicates(subset='id', inplace=True)
 
     # filling None values
-    dataframe['type'].fillna(pandas.NA, inplace=True)
     dataframe['company'].fillna('anon', inplace=True)
+    dataframe['city'].fillna('colombia', inplace=True)
+    dataframe['department'].fillna('colombia', inplace=True)
 
     # casting education
     dataframe['description'] = dataframe['description'].str.decode('base64_codec')
@@ -107,8 +108,8 @@ def lambda_handler(event, context):
         ~(mask_type_hybrid|mask_type_remote) , "non-remote", inplace=True)
     
     # cleaning experience
-    mask_experience1 = dataframe['experience'].str.extract(r"(\d)+ año.?").squeeze()
-    mask_experience2 = dataframe['description'].str.extract(r"(\d)+.año.?").squeeze()
+    mask_experience1 = dataframe['experience'].str.extract(r"(\d)[+-]? año.?").squeeze()
+    mask_experience2 = dataframe['description'].str.extract(r"(\d)[+-]?.año.?").squeeze()
     dataframe['experience'].update(mask_experience1)
     dataframe['experience'].update(mask_experience2)
     dataframe['experience'].fillna('0', inplace=True)
@@ -123,10 +124,9 @@ def lambda_handler(event, context):
 
     # mapping 'languages' and 'softwares' dataframes
     languages = module.tag_df(dataframe, pk='id', search='description', tags=languages_columns)
-    print(languages.loc[languages['Python']==True, ['Id','Python']])
-
-    # dropping useless columns
+    softwares = module.tag_df(dataframe, pk='id', search='description', tags=software_columns)
     posters = dataframe.drop(columns=['title','postDate'])
+    # dropping useless columns
     del dataframe
 
     # encoding back the 'description' columns into base64
@@ -144,10 +144,8 @@ def lambda_handler(event, context):
     posters[['description','english']] = posters[['english','description']]
     posters.rename(columns={"description": "english", "english": "description"}, inplace=True)
 
-    #print("Rows after ETL", posters.shape[0])
-    #print(posters.info())
-
-
+    print("Rows after ETL", posters.shape[0])
+    print(posters.info())
 
     # Loads - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

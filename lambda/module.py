@@ -60,7 +60,12 @@ def tag_df(df : DataFrame, pk : str, search : str, tags : list[str]):
     result = DataFrame(columns=tags)
     result['Id'] = pk_column
     for tag in tags[1:]:
-        result[tag] = source.str.match(fr".* \(?{tag.lower()}+\)?\.?\,? .*")
+        if (tag == 'C#'):
+            result[tag] = source.str.match(r"(\n|.)*\b(c\#{1}|\.?net)\b(\n|.)*", flags=re.IGNORECASE)
+        elif (tag == 'C++'):
+            result[tag] = source.str.match(r"(\n|.)*\b(c\+\+)+\b(\n|.)*", flags=re.IGNORECASE)
+        else:
+            result[tag] = source.str.match(fr"(\n|.)*\b{tag.lower()}\b(\n|.)*", flags=re.IGNORECASE)
 
     return result
 

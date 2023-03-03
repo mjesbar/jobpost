@@ -18,21 +18,22 @@ def s3object_bytes(obj : StreamingBody):
     return buffer_bytes
 
 
-def upload_df(data : DataFrame, s3client, bucket, target_path):   
+
+def upload_df(data : DataFrame, s3client, bucket, save_key):   
 	# exporting tranformed dataframe toward target subfolder in 'jobpost-project' Bucket
-    # save step
     save_bytes = open("./tmp", "wb")
     data.to_parquet(save_bytes, engine="pyarrow", compression="gzip")
-    # upload step
     upload_bytes = open("./tmp", "rb")
     response = s3client.put_object(Body=upload_bytes, Bucket=bucket,
-                                   Key=f"{target_path}test.gz.parquet", ContentType="parquet")
+                                   Key=f"{save_key}.gz.parquet", ContentType="parquet")
+    # cleaning actions
     save_bytes.close()
     upload_bytes.close()
     os.remove("./tmp")
 
     return response
             
+
 
 def merge_partitions(df : DataFrame, keys : list[str], s3, bucket):
 	# getting the binaries and append to 'df'
@@ -51,6 +52,7 @@ def merge_partitions(df : DataFrame, keys : list[str], s3, bucket):
     print("\rRows Appended", df.shape[0])
 
     return df
+
 
 
 def tag_df(df : DataFrame, pk : str, search : str, tags : list[str]):

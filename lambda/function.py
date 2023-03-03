@@ -11,8 +11,8 @@ pandas.set_option("display.width", 200)
 
 # S3 information
 bucket_name = "jobpost-project"
-raw_folder_key = "raw/"
-target_folder_key = "processed/"
+raw_folder = "raw/"
+target_folder = "processed/"
 
 
 def lambda_handler(event, context):
@@ -29,22 +29,22 @@ def lambda_handler(event, context):
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
     # getting list the 'raw/' in 'jobpost-project' bucket
-    #s3client = boto3.client("s3")
-    #response = s3client.list_objects(Bucket="jobpost-project", Marker=raw_folder_key)
-    #response_content = response.get("Contents")
-    #for element in response_content:
-       #keys.append(element.get("Key"))
-    #dataframe = module.merge_partitions(dataframe, keys, s3client, bucket_name)
+    s3client = boto3.client("s3")
+    response = s3client.list_objects(Bucket="jobpost-project", Marker=raw_folder)
+    response_content = response.get("Contents")
+    for element in response_content:
+       keys.append(element.get("Key"))
+    dataframe = module.merge_partitions(dataframe, keys, s3client, bucket_name)
 
 #tmp test
-    ls_data = os.listdir("../data/")
-    ls_data_filtered = filter(lambda x: 'parquet' in x, ls_data)
-    ls = list(ls_data_filtered)
+    #ls_data = os.listdir("../data/")
+    #ls_data_filtered = filter(lambda x: 'parquet' in x, ls_data)
+    #ls = list(ls_data_filtered)
 
-    for file in ls:
-        tmp = f"../data/{file}"
-        tmpdf = pandas.read_parquet(tmp)
-        dataframe = pandas.concat([dataframe, tmpdf], ignore_index=True, )
+    #for file in ls:
+        #tmp = f"../data/{file}"
+        #tmpdf = pandas.read_parquet(tmp)
+        #dataframe = pandas.concat([dataframe, tmpdf], ignore_index=True, )
     
     print("Rows collected", dataframe.shape[0])
 
@@ -154,7 +154,18 @@ def lambda_handler(event, context):
     # Loads - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     # uploading tranformed 'dataframe'
-    #upload_response = module.upload_df(posters, s3client, bucket_name, target_folder_key)
+    upload_posters_response = module.upload_df(posters, s3client=s3client,
+                                               bucket=bucket_name, save_key=f"{target_folder}posters")
+    upload_languages_response = module.upload_df(languages, s3client=s3client,
+                                               bucket=bucket_name, save_key=f"{target_folder}languages")
+    upload_softwares_response = module.upload_df(softwares, s3client=s3client,
+                                               bucket=bucket_name, save_key=f"{target_folder}softwares")
+
+    print("Uploading ... ")
+    print(" > Posters DataFrame\t", upload_posters_response['ResponseMetadata']['HTTPStatusCode'])
+    print(" > Languages DataFrame\t", upload_languages_response['ResponseMetadata']['HTTPStatusCode'])
+    print(" > Softwares DataFrame\t", upload_softwares_response['ResponseMetadata']['HTTPStatusCode'])
+
 
 
 

@@ -1,0 +1,14 @@
+{
+    "ACL": "private",
+    "Bucket": "",
+    "CreateBucketConfiguration": {
+        "LocationConstraint": "af-south-1"
+    },
+    "GrantFullControl": "",
+    "GrantRead": "",
+    "GrantReadACP": "",
+    "GrantWrite": "",
+    "GrantWriteACP": "",
+    "ObjectLockEnabledForBucket": true,
+    "ObjectOwnership": "BucketOwnerPreferred"
+}

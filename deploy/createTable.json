@@ -1,0 +1,102 @@
+{
+    "CatalogId": "",
+    "DatabaseName": "",
+    "TableInput": {
+        "Name": "",
+        "Description": "",
+        "Owner": "",
+        "LastAccessTime": "1970-01-01T00:00:00",
+        "LastAnalyzedTime": "1970-01-01T00:00:00",
+        "Retention": 0,
+        "StorageDescriptor": {
+            "Columns": [
+                {
+                    "Name": "",
+                    "Type": "",
+                    "Comment": "",
+                    "Parameters": {
+                        "KeyName": ""
+                    }
+                }
+            ],
+            "Location": "",
+            "AdditionalLocations": [
+                ""
+            ],
+            "InputFormat": "",
+            "OutputFormat": "",
+            "Compressed": true,
+            "NumberOfBuckets": 0,
+            "SerdeInfo": {
+                "Name": "",
+                "SerializationLibrary": "",
+                "Parameters": {
+                    "KeyName": ""
+                }
+            },
+            "BucketColumns": [
+                ""
+            ],
+            "SortColumns": [
+                {
+                    "Column": "",
+                    "SortOrder": 0
+                }
+            ],
+            "Parameters": {
+                "KeyName": ""
+            },
+            "SkewedInfo": {
+                "SkewedColumnNames": [
+                    ""
+                ],
+                "SkewedColumnValues": [
+                    ""
+                ],
+                "SkewedColumnValueLocationMaps": {
+                    "KeyName": ""
+                }
+            },
+            "StoredAsSubDirectories": true,
+            "SchemaReference": {
+                "SchemaId": {
+                    "SchemaArn": "",
+                    "SchemaName": "",
+                    "RegistryName": ""
+                },
+                "SchemaVersionId": "",
+                "SchemaVersionNumber": 0
+            }
+        },
+        "PartitionKeys": [
+            {
+                "Name": "",
+                "Type": "",
+                "Comment": "",
+                "Parameters": {
+                    "KeyName": ""
+                }
+            }
+        ],
+        "ViewOriginalText": "",
+        "ViewExpandedText": "",
+        "TableType": "",
+        "Parameters": {
+            "KeyName": ""
+        },
+        "TargetTable": {
+            "CatalogId": "",
+            "DatabaseName": "",
+            "Name": ""
+        }
+    },
+    "PartitionIndexes": [
+        {
+            "Keys": [
+                ""
+            ],
+            "IndexName": ""
+        }
+    ],
+    "TransactionId": ""
+}

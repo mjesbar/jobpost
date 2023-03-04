@@ -1,0 +1,69 @@
+{
+    "FunctionName": "",
+    "Runtime": "nodejs",
+    "Role": "",
+    "Handler": "",
+    "Code": {
+        "ZipFile": null,
+        "S3Bucket": "",
+        "S3Key": "",
+        "S3ObjectVersion": "",
+        "ImageUri": ""
+    },
+    "Description": "",
+    "Timeout": 0,
+    "MemorySize": 0,
+    "Publish": true,
+    "VpcConfig": {
+        "SubnetIds": [
+            ""
+        ],
+        "SecurityGroupIds": [
+            ""
+        ]
+    },
+    "PackageType": "Zip",
+    "DeadLetterConfig": {
+        "TargetArn": ""
+    },
+    "Environment": {
+        "Variables": {
+            "KeyName": ""
+        }
+    },
+    "KMSKeyArn": "",
+    "TracingConfig": {
+        "Mode": "Active"
+    },
+    "Tags": {
+        "KeyName": ""
+    },
+    "Layers": [
+        ""
+    ],
+    "FileSystemConfigs": [
+        {
+            "Arn": "",
+            "LocalMountPath": ""
+        }
+    ],
+    "ImageConfig": {
+        "EntryPoint": [
+            ""
+        ],
+        "Command": [
+            ""
+        ],
+        "WorkingDirectory": ""
+    },
+    "CodeSigningConfigArn": "",
+    "Architectures": [
+        "x86_64"
+    ],
+    "EphemeralStorage": {
+        "Size": 0
+    },
+    "SnapStart": {
+        "ApplyOn": "PublishedVersions"
+    }
+}

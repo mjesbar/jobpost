@@ -1,4 +1,5 @@
 import io, os, boto3, base64, re
+from numpy import save
 from pandas import DataFrame, Index, Series, read_parquet, read_csv, concat
 from botocore.response import StreamingBody
 
@@ -21,15 +22,11 @@ def s3object_bytes(obj : StreamingBody):
 
 def upload_df(data : DataFrame, s3client, bucket, save_key):   
 	# exporting tranformed dataframe toward target subfolder in 'jobpost-project' Bucket
-    save_bytes = open("./tmp", "wb")
+    save_bytes = io.BytesIO()
     data.to_parquet(save_bytes, engine="pyarrow", compression="gzip")
-    upload_bytes = open("./tmp", "rb")
-    response = s3client.put_object(Body=upload_bytes, Bucket=bucket,
+    save_bytes.seek(0)
+    response = s3client.put_object(Body=save_bytes, Bucket=bucket,
                                    Key=f"{save_key}.gz.parquet", ContentType="parquet")
-    # cleaning actions
-    save_bytes.close()
-    upload_bytes.close()
-    os.remove("./tmp")
 
     return response
             

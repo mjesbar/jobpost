@@ -3,7 +3,6 @@
 from datetime import datetime
 import boto3, module, pandas
 import os, io, json, base64, re
-print()
 
 
 # interactive pandas configurations
@@ -37,16 +36,6 @@ def lambda_handler(event, context):
        keys.append(element.get("Key"))
     dataframe = module.merge_partitions(dataframe, keys, s3client, bucket_name)
 
-#tmp test
-    #ls_data = os.listdir("../data/")
-    #ls_data_filtered = filter(lambda x: 'parquet' in x, ls_data)
-    #ls = list(ls_data_filtered)
-
-    #for file in ls:
-        #tmp = f"../data/{file}"
-        #tmpdf = pandas.read_parquet(tmp)
-        #dataframe = pandas.concat([dataframe, tmpdf], ignore_index=True, )
-    
     print("Rows collected", dataframe.shape[0])
 
     # Tranformation
@@ -162,15 +151,14 @@ def lambda_handler(event, context):
     upload_softwares_response = module.upload_df(softwares, s3client=s3client,
                                                bucket=bucket_name, save_key=f"{target_folder}softwaresTable/softwares")
 
-    exit_handler = "\
-        Uploading ... \n\
-        > Posters DataFrame\t\", upload_posters_response['ResponseMetadata']['HTTPStatusCode'] \n\
-        > Languages DataFrame\t\", upload_languages_response['ResponseMetadata']['HTTPStatusCode'] \n\
-        > Softwares DataFrame\t\", upload_softwares_response['ResponseMetadata']['HTTPStatusCode'] \
+    exit_handler = \
+        f"Uploading ... \n\
+        > Posters DataFrame\t\", {upload_posters_response['ResponseMetadata']['HTTPStatusCode']}\n\
+        > Languages DataFrame\t\", {upload_languages_response['ResponseMetadata']['HTTPStatusCode']}\n\
+        > Softwares DataFrame\t\", {upload_softwares_response['ResponseMetadata']['HTTPStatusCode']}\
         "
+    print(exit_handler)
 
-    return exit_handler
+    return {}
 
 lambda_handler(1,1)
-
-

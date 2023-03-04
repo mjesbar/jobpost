@@ -45,8 +45,6 @@ def merge_partitions(df : DataFrame, keys : list[str], s3, bucket):
             parquet_file = s3object_bytes(object_body)
             tmpdf = read_parquet(parquet_file, engine="pyarrow")
             df = concat([df, tmpdf], ignore_index=True, verify_integrity=True)
-	#end for
-    print("\rRows Appended", df.shape[0])
 
     return df
 

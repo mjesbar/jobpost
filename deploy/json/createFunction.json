@@ -1,69 +1,20 @@
 {
-    "FunctionName": "",
-    "Runtime": "nodejs",
-    "Role": "",
-    "Handler": "",
+    "FunctionName": "test",
+    "Runtime": "python3.9",
+    "Role": "arn:aws:iam::326117943082:role/AdminRole",
+    "Handler": "code.lambda_handler",
     "Code": {
-        "ZipFile": null,
-        "S3Bucket": "",
-        "S3Key": "",
-        "S3ObjectVersion": "",
-        "ImageUri": ""
+        "ZipFile": "file://lambda/functions/cleaner/cleaner.zip"
     },
-    "Description": "",
-    "Timeout": 0,
-    "MemorySize": 0,
+    "Description": "Performs the data cleaning of the jobpost-project",
+    "Timeout": 30,
+    "MemorySize": 512,
     "Publish": true,
-    "VpcConfig": {
-        "SubnetIds": [
-            ""
-        ],
-        "SecurityGroupIds": [
-            ""
-        ]
-    },
     "PackageType": "Zip",
-    "DeadLetterConfig": {
-        "TargetArn": ""
-    },
-    "Environment": {
-        "Variables": {
-            "KeyName": ""
-        }
-    },
-    "KMSKeyArn": "",
-    "TracingConfig": {
-        "Mode": "Active"
-    },
-    "Tags": {
-        "KeyName": ""
-    },
     "Layers": [
-        ""
+        "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:3"
     ],
-    "FileSystemConfigs": [
-        {
-            "Arn": "",
-            "LocalMountPath": ""
-        }
-    ],
-    "ImageConfig": {
-        "EntryPoint": [
-            ""
-        ],
-        "Command": [
-            ""
-        ],
-        "WorkingDirectory": ""
-    },
-    "CodeSigningConfigArn": "",
     "Architectures": [
         "x86_64"
-    ],
-    "EphemeralStorage": {
-        "Size": 0
-    },
-    "SnapStart": {
-        "ApplyOn": "PublishedVersions"
-    }
+    ]
 }

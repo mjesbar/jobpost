@@ -5,6 +5,8 @@ log_file="$path/deploy/deploy.log"
 touch $log_file
 
 operation_date=$(date)
+echo -e " -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - " \
+    >> $log_file
 echo -e "\n > [$operation_date] :\n" >> $log_file
 
 # Getting the list of buckets, to check if bucket has been previously created
@@ -27,3 +29,6 @@ else
     echo -e "'$bucket_name' bucket already exists in AWS account." \
         >> $log_file
 fi
+
+echo -e "END BUCKET DEPLOYMENT" \
+    >> $log_file

@@ -14,3 +14,85 @@ Checking if bucket jobpost-project exists ...
 
  > [Sat 04 Mar 2023 12:25:26 PM -05] :
 
+
+ > [Sat 04 Mar 2023 01:07:19 PM -05] :
+
+'cleaner' function already exists in AWS account.
+
+ > [Sat 04 Mar 2023 02:15:38 PM -05] :
+
+'cleaner' fucntion doesn't exist. Creating Resource ... 
+AWS response:
+
+ > [Sat 04 Mar 2023 02:16:10 PM -05] :
+
+'cleaner' fucntion doesn't exist. Creating Resource ... 
+AWS response:
+
+ > [Sat 04 Mar 2023 02:17:00 PM -05] :
+
+'cleaner' fucntion doesn't exist. Creating Resource ... 
+AWS response:
+
+ > [Sat 04 Mar 2023 02:17:15 PM -05] :
+
+'cleaner' fucntion doesn't exist. Creating Resource ... 
+AWS response:
+
+ > [Sat 04 Mar 2023 02:17:51 PM -05] :
+
+'test' function already exists in AWS account.
+
+ > [Sat 04 Mar 2023 02:18:35 PM -05] :
+
+'test' fucntion doesn't exist. Creating Resource ... 
+AWS response:
+ -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - 
+
+ > [Sat 04 Mar 2023 03:22:17 PM -05] :
+
+Checking if bucket cleaner exists ... 
+'cleaner' fucntion doesn't exist. Creating Resource ... 
+AWS response:
+   > AWS Lambda Function Creation ... 
+{
+    "FunctionName": "cleaner",
+    "FunctionArn": "arn:aws:lambda:us-east-1:326117943082:function:cleaner",
+    "Runtime": "python3.9",
+    "Role": "arn:aws:iam::326117943082:role/AdminRole",
+    "Handler": "code.lambda_handler",
+    "CodeSize": 5967,
+    "Description": "",
+    "Timeout": 30,
+    "MemorySize": 512,
+    "LastModified": "2023-03-04T20:22:22.695+0000",
+    "CodeSha256": "89OejroeYJXBmgZD0X4qUAbjohTEdTBh6RGJEPG1ps4=",
+    "Version": "1",
+    "TracingConfig": {
+        "Mode": "PassThrough"
+    },
+    "RevisionId": "d1bc6ca4-dc22-4b81-96ad-615d58b1bbae",
+    "Layers": [
+        {
+            "Arn": "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:3",
+            "CodeSize": 49753273
+        }
+    ],
+    "State": "Pending",
+    "StateReason": "The function is being created.",
+    "StateReasonCode": "Creating",
+    "PackageType": "Zip",
+    "Architectures": [
+        "x86_64"
+    ],
+    "EphemeralStorage": {
+        "Size": 512
+    },
+    "SnapStart": {
+        "ApplyOn": "None",
+        "OptimizationStatus": "Off"
+    }
+}
+   > AWS Lambda Function Trigger Settings ...
+   > AWS Lambda Function Permissions Settings ...
+END FUNCTION DEPLOYMENT

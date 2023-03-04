@@ -1,13 +1,8 @@
 {
-    "FunctionName": "",
-    "StatementId": "",
-    "Action": "",
-    "Principal": "",
-    "SourceArn": "",
-    "SourceAccount": "",
-    "EventSourceToken": "",
-    "Qualifier": "",
-    "RevisionId": "",
-    "PrincipalOrgID": "",
-    "FunctionUrlAuthType": "NONE"
+    "FunctionName": "cleaner",
+    "StatementId": "cleanerS3TriggerPermission",
+    "Action": "lambda:InvokeFunction",
+    "Principal": "s3.amazonaws.com",
+    "SourceArn": "arn:aws:s3:::jobpost-project",
+    "SourceAccount": "326117943082"
 }

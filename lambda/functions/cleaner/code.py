@@ -161,4 +161,4 @@ def lambda_handler(event, context):
 
     return {}
 
-lambda_handler(1,1)
+#lambda_handler(1,1) # just for local test purposes

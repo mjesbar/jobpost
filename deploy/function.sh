@@ -4,11 +4,14 @@ path="$HOME/Github/jobpost"
 log_file="$path/deploy/deploy.log"
 touch $log_file
 
-operation_date=$(date)
-echo -e " -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - " \
-    >> $log_file
-echo -e "\n > [$operation_date] :\n" \
-    >> $log_file
+function prompt_status() {
+    if [[ $? -eq 0 ]]
+    then
+        echo -e "OK" | tee -a $log_file
+    fi
+}
+
+echo -e "STARTS FUNCTION DEPLOYMENT :" | tee -a $log_file
 
 # Checking function exists 
 function_name='cleaner'
@@ -17,20 +20,20 @@ function_check=$( aws lambda list-functions \
     | grep -w "$function_name")
 
 # Starts the creation process if function doesn't exist
-echo -e "Checking if bucket $function_name exists ... " \
-    >> $log_file
+echo -e "Checking if function $function_name exists ... " \
+    | tee -a $log_file
 
 if [[ -z $function_check ]]
 then
-    echo -e "'$function_name' fucntion doesn't exist. Creating Resource ... " \
-        >> $log_file
+    echo -e "'$function_name' doesn't exists, Creating Resource ... " \
+        | tee -a $log_file
     echo -e "AWS response:" \
-        >> $log_file
+        | tee -a $log_file
     # for some reason there's no way to upload the blob 'cleaner.zip' file via
     # json-cli, Maybe lack of base64 support. Anyway, I use the shothand way
     # suggested by aws.
-    echo -e "   > AWS Lambda Function Creation ... " \
-        >> $log_file
+    echo -ne "   > AWS Lambda Function Creation ... " \
+        | tee -a $log_file
     aws lambda create-function \
         --function-name "$function_name" \
         --runtime "python3.9" \
@@ -43,20 +46,27 @@ then
         --memory-size 512 \
         --publish \
         >> $log_file
+    prompt_status
 
-    echo -e "   > AWS Lambda Function Trigger Settings ..." \
+    echo -ne "   > AWS Lambda Function Trigger Settings ... " \
+        | tee -a $log_file
+    aws s3api put-bucket-notification-configuration \
+        --cli-input-json file://deploy/json/s3EventConfiguration.json \
         >> $log_file
-    aws s3api put-bucket-notification-configuration --cli-input-json file://deploy/json/s3EventConfiguration.json \
-        >> $log_file
+    prompt_status
 
-    echo -e "   > AWS Lambda Function Permissions Settings ..." \
+    echo -ne "   > AWS Lambda Function Permissions Settings ... " \
+        | tee -a $log_file
+    aws lambda add-permission \
+        --cli-input-json file://deploy/json/s3EventPermission.json \
         >> $log_file
-    aws lambda add-permissions --cli-input-json file://deploy/json/s3EventPermission.json \
-        >> $log_file
+    prompt_status
 else
     echo -e "'$function_name' function already exists in AWS account." \
-        >> $log_file
+        | tee -a $log_file
 fi
 
 echo -e "END FUNCTION DEPLOYMENT" \
-    >> $log_file
+    | tee -a $log_file
+
+

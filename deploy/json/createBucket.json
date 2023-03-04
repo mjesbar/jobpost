@@ -1,0 +1,5 @@
+{
+    "ACL": "private",
+    "Bucket": "jobpost-project",
+    "ObjectOwnership": "BucketOwnerPreferred"
+}

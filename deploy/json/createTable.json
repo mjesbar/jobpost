@@ -1,102 +1,27 @@
 {
-    "CatalogId": "",
-    "DatabaseName": "",
+    "DatabaseName": "<target database>",
     "TableInput": {
         "Name": "",
-        "Description": "",
-        "Owner": "",
-        "LastAccessTime": "1970-01-01T00:00:00",
-        "LastAnalyzedTime": "1970-01-01T00:00:00",
-        "Retention": 0,
+        "Description": "bla bla bla",
         "StorageDescriptor": {
             "Columns": [
                 {
-                    "Name": "",
-                    "Type": "",
-                    "Comment": "",
-                    "Parameters": {
-                        "KeyName": ""
-                    }
+                    "Name": "<field>", "Type": "<type>"
                 }
             ],
             "Location": "",
-            "AdditionalLocations": [
-                ""
-            ],
-            "InputFormat": "",
-            "OutputFormat": "",
+            "InputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat",
+            "OutputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat",
             "Compressed": true,
-            "NumberOfBuckets": 0,
             "SerdeInfo": {
-                "Name": "",
-                "SerializationLibrary": "",
+                "SerializationLibrary": "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe",
                 "Parameters": {
-                    "KeyName": ""
+                    "serialization.format": "1"
                 }
-            },
-            "BucketColumns": [
-                ""
-            ],
-            "SortColumns": [
-                {
-                    "Column": "",
-                    "SortOrder": 0
-                }
-            ],
-            "Parameters": {
-                "KeyName": ""
-            },
-            "SkewedInfo": {
-                "SkewedColumnNames": [
-                    ""
-                ],
-                "SkewedColumnValues": [
-                    ""
-                ],
-                "SkewedColumnValueLocationMaps": {
-                    "KeyName": ""
-                }
-            },
-            "StoredAsSubDirectories": true,
-            "SchemaReference": {
-                "SchemaId": {
-                    "SchemaArn": "",
-                    "SchemaName": "",
-                    "RegistryName": ""
-                },
-                "SchemaVersionId": "",
-                "SchemaVersionNumber": 0
             }
         },
-        "PartitionKeys": [
-            {
-                "Name": "",
-                "Type": "",
-                "Comment": "",
-                "Parameters": {
-                    "KeyName": ""
-                }
-            }
-        ],
-        "ViewOriginalText": "",
-        "ViewExpandedText": "",
-        "TableType": "",
         "Parameters": {
-            "KeyName": ""
-        },
-        "TargetTable": {
-            "CatalogId": "",
-            "DatabaseName": "",
-            "Name": ""
+            "classification": "parquet"
         }
-    },
-    "PartitionIndexes": [
-        {
-            "Keys": [
-                ""
-            ],
-            "IndexName": ""
-        }
-    ],
-    "TransactionId": ""
+    }
 }

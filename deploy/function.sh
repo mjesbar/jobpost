@@ -8,6 +8,8 @@ function prompt_status() {
     if [[ $? -eq 0 ]]
     then
         echo -e "OK" | tee -a $log_file
+    else
+        echo -e "ERROR" | tee -a $log_file
     fi
 }
 

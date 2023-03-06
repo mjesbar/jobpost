@@ -8,6 +8,8 @@ function prompt_status() {
     if [[ $? -eq 0 ]]
     then
         echo -e "OK" | tee -a $log_file
+    else
+        echo -e "ERROR" | tee -a $log_file
     fi
 }
 
@@ -31,7 +33,7 @@ then
     # task tracking
     echo -ne "   > AWS S3 Bucket Creation ... " \
         | tee -a $log_file
-    aws s3api create-bucket --cli-input-json file://json/createBucket.json \
+    aws s3api create-bucket --cli-input-json file://deploy/json/createBucket.json \
         >> $log_file
     prompt_status
 else

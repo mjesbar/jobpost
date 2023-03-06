@@ -15,3 +15,147 @@ STARTS FUNCTION DEPLOYMENT :
 Checking if function cleaner exists ... 
 'cleaner' function already exists in AWS account.
 END FUNCTION DEPLOYMENT
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost-project' database already exists in AWS account.
+END BUCKET DEPLOYMENT
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost-project' database already exists in AWS account.
+END BUCKET DEPLOYMENT
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost-project' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS Glue Database in Catalog Creation ... OK
+   > AWS Glue Tables in jobpost-project DB Creation ... END BUCKET DEPLOYMENT
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost-project' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS Glue Database in Catalog Creation ... OK
+   > AWS Glue Tables in jobpost-project DB Creation ... OK
+END BUCKET DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' bucket already exists in AWS account.
+END BUCKET DEPLOYMENT
+STARTS FUNCTION DEPLOYMENT :
+Checking if function cleaner exists ... 
+'cleaner' function already exists in AWS account.
+END FUNCTION DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' bucket already exists in AWS account.
+END BUCKET DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS S3 Bucket Creation ... ERROR
+   > AWS S3 folders Creation ... ERROR
+END BUCKET DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS S3 Bucket Creation ... {
+    "Location": "/jobpost-project"
+}
+OK
+   > AWS S3 folders Creation ... upload: ./tmpcreator to s3://jobpost-project/raw/tmpcreator
+upload: ./tmpcreator to s3://jobpost-project/processed/tmpcreator
+delete: s3://jobpost-project/raw/tmpcreator
+delete: s3://jobpost-project/processed/tmpcreator
+OK
+END BUCKET DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS S3 Bucket Creation ... {
+    "Location": "/jobpost-project"
+}
+OK
+   > AWS S3 folders Creation ... Completed 59 Bytes/59 Bytes (103 Bytes/s) with 1 file(s) remainingupload: ./README.md to s3://jobpost-project/raw/README.md         
+Completed 59 Bytes/59 Bytes (108 Bytes/s) with 1 file(s) remainingupload: ./README.md to s3://jobpost-project/processed/README.md   
+OK
+END BUCKET DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' bucket already exists in AWS account.
+END BUCKET DEPLOYMENT
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost-project' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS Glue Database in Catalog Creation ... OK
+   > AWS Glue Tables in jobpost-project DB Creation ... OK
+END BUCKET DEPLOYMENT
+STARTS FUNCTION DEPLOYMENT :
+Checking if function cleaner exists ... 
+'cleaner' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS Lambda Function Creation ... {
+    "FunctionName": "cleaner",
+    "FunctionArn": "arn:aws:lambda:us-east-1:326117943082:function:cleaner",
+    "Runtime": "python3.9",
+    "Role": "arn:aws:iam::326117943082:role/AdminRole",
+    "Handler": "code.lambda_handler",
+    "CodeSize": 5964,
+    "Description": "",
+    "Timeout": 30,
+    "MemorySize": 512,
+    "LastModified": "2023-03-06T00:57:12.129+0000",
+    "CodeSha256": "AXTeicYIFcNA7ETllgyPikof/oeNz+Fygee19XpRQ00=",
+    "Version": "9",
+    "TracingConfig": {
+        "Mode": "PassThrough"
+    },
+    "RevisionId": "fe8f0c2c-1995-4de6-9053-3f0d56dee162",
+    "Layers": [
+        {
+            "Arn": "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:3",
+            "CodeSize": 49753273
+        }
+    ],
+    "State": "Pending",
+    "StateReason": "The function is being created.",
+    "StateReasonCode": "Creating",
+    "PackageType": "Zip",
+    "Architectures": [
+        "x86_64"
+    ],
+    "EphemeralStorage": {
+        "Size": 512
+    },
+    "SnapStart": {
+        "ApplyOn": "None",
+        "OptimizationStatus": "Off"
+    }
+}
+OK
+   > AWS Lambda Function Trigger Settings ... OK
+   > AWS Lambda Function Permissions Settings ... {
+    "Statement": "{\"Sid\":\"cleanerS3TriggerPermission\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"lambda:InvokeFunction\",\"Resource\":\"arn:aws:lambda:us-east-1:326117943082:function:cleaner\",\"Condition\":{\"StringEquals\":{\"AWS:SourceAccount\":\"326117943082\"},\"ArnLike\":{\"AWS:SourceArn\":\"arn:aws:s3:::jobpost-project\"}}}"
+}
+OK
+END FUNCTION DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS S3 Bucket Creation ... {
+    "Location": "/jobpost-project"
+}
+OK
+   > AWS S3 folders Creation ... upload: ./blank.parquet to s3://jobpost-project/raw/blank.parquet
+upload: ./blank.parquet to s3://jobpost-project/processed/blank.parquet
+OK
+END BUCKET DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS S3 Bucket Creation ... {
+    "Location": "/jobpost-project"
+}
+OK
+   > AWS S3 folders Creation ... END BUCKET DEPLOYMENT

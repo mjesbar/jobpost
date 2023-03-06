@@ -1,75 +1,72 @@
 {
     "DatabaseName": "jobpost",
     "TableInput": {
-        "Name": "languages",
-        "Description": "Languages Table",
+        "Name": "softwares",
+        "Description": "Softwares Table",
         "StorageDescriptor": {
             "Columns": [
                 {
                     "Name": "id", "Type": "string"
                 },
                 {
-                    "Name": "javascript", "Type": "boolean"
+                    "Name": "git", "Type": "boolean"
                 },
                 {
-                    "Name": "python", "Type": "boolean"
+                    "Name": "hadoop", "Type": "boolean"
                 },
                 {
-                    "Name": "go", "Type": "boolean"
+                    "Name": "spark", "Type": "boolean"
                 },
                 {
-                    "Name": "java", "Type": "boolean"
+                    "Name": "kafka", "Type": "boolean"
                 },
                 {
-                    "Name": "kotlin", "Type": "boolean"
+                    "Name": "mysql", "Type": "boolean"
                 },
                 {
-                    "Name": "php", "Type": "boolean"
+                    "Name": "postgresql", "Type": "boolean"
                 },
                 {
-                    "Name": "c#", "Type": "boolean"
+                    "Name": "sql server", "Type": "boolean"
                 },
                 {
-                    "Name": "swift", "Type": "boolean"
+                    "Name": "t-sql", "Type": "boolean"
                 },
                 {
-                    "Name": "r", "Type": "boolean"
+                    "Name": "aws", "Type": "boolean"
                 },
                 {
-                    "Name": "ruby", "Type": "boolean"
+                    "Name": "azure", "Type": "boolean"
                 },
                 {
-                    "Name": "c++", "Type": "boolean"
+                    "Name": "gcp", "Type": "boolean"
                 },
                 {
-                    "Name": "matlab", "Type": "boolean"
+                    "Name": "excel", "Type": "boolean"
                 },
                 {
-                    "Name": "typescript", "Type": "boolean"
+                    "Name": "powerpoint", "Type": "boolean"
                 },
                 {
-                    "Name": "scala", "Type": "boolean"
+                    "Name": "word", "Type": "boolean"
                 },
                 {
-                    "Name": "sql", "Type": "boolean"
+                    "Name": "power bi", "Type": "boolean"
                 },
                 {
-                    "Name": "html", "Type": "boolean"
+                    "Name": "qliksense", "Type": "boolean"
                 },
                 {
-                    "Name": "css", "Type": "boolean"
+                    "Name": "tableau", "Type": "boolean"
                 },
                 {
-                    "Name": "nosql", "Type": "boolean"
+                    "Name": "sap", "Type": "boolean"
                 },
                 {
-                    "Name": "rust", "Type": "boolean"
-                },
-                {
-                    "Name": "perl", "Type": "boolean"
+                    "Name": "oracle", "Type": "boolean"
                 }
             ],
-            "Location": "s3://jobpost-project/processed/languagesTable/",
+            "Location": "s3://jobpost-project/processed/softwaresTable/",
             "InputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat",
             "OutputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat",
             "Compressed": true,

@@ -13,6 +13,7 @@ function prompt_status() {
     fi
 }
 
+echo | tee -a $log_file
 echo -e "STARTS FUNCTION DEPLOYMENT :" | tee -a $log_file
 
 # Checking function exists 

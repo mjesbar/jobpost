@@ -13,6 +13,7 @@ function prompt_status() {
     fi
 }
 
+echo | tee -a $log_file
 echo -e "STARTS BUCKET DEPLOYMENT:" | tee -a $log_file
 
 # Getting the list of buckets, to check if bucket has been previously created

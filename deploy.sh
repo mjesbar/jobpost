@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -o pipefail
+
+path="$HOME/Github/jobpost"
+log="$path/deploy.log"
+current_date=$( date )
+
+echo " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - " | tee $log
+echo "######## $current_date ##########" | tee -a $log
+echo | tee -a $log
+
+bash $path/deploy/bucket.sh || \
+    {
+        echo "BucketDeployError: Something bas when creating bucket." | tee -a $log
+        exit 1
+    }
+bash $path/deploy/catalog.sh || \
+    {
+        echo "GlueCatalogDeployError: Something bas when creating bucket." | tee -a $log
+        exit 1
+    }
+bash $path/deploy/function.sh || \
+    {
+        echo "LambdaFunctionDeployError: Something bas when creating bucket." | tee -a $log
+        exit 1
+    }
+
+echo | tee -a $log

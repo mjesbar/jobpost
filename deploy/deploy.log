@@ -159,3 +159,70 @@ AWS response:
 }
 OK
    > AWS S3 folders Creation ... END BUCKET DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' bucket already exists in AWS account.
+END BUCKET DEPLOYMENT
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost-project' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS Glue Database in Catalog Creation ...    > AWS Glue Tables in jobpost-project DB Creation ... END BUCKET DEPLOYMENT
+STARTS FUNCTION DEPLOYMENT :
+Checking if function cleaner exists ... 
+'cleaner' function already exists in AWS account.
+END FUNCTION DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' bucket already exists in AWS account.
+END BUCKET DEPLOYMENT
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost' database already exists in AWS account.
+END BUCKET DEPLOYMENT
+STARTS FUNCTION DEPLOYMENT :
+Checking if function cleaner exists ... 
+'cleaner' function already exists in AWS account.
+END FUNCTION DEPLOYMENT
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' bucket already exists in AWS account.
+END BUCKET DEPLOYMENT
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost' database already exists in AWS account.
+END BUCKET DEPLOYMENT
+STARTS FUNCTION DEPLOYMENT :
+Checking if function cleaner exists ... 
+'cleaner' function already exists in AWS account.
+END FUNCTION DEPLOYMENT
+
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' bucket already exists in AWS account.
+END BUCKET DEPLOYMENT
+
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' bucket already exists in AWS account.
+END BUCKET DEPLOYMENT
+
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost' database already exists in AWS account.
+END BUCKET DEPLOYMENT
+
+STARTS FUNCTION DEPLOYMENT :
+Checking if function cleaner exists ... 
+'cleaner' function already exists in AWS account.
+END FUNCTION DEPLOYMENT
+
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' bucket already exists in AWS account.
+END BUCKET DEPLOYMENT
+
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost' database already exists in AWS account.
+END BUCKET DEPLOYMENT
+
+STARTS FUNCTION DEPLOYMENT :
+Checking if function cleaner exists ... 
+'cleaner' function already exists in AWS account.
+END FUNCTION DEPLOYMENT

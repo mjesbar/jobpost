@@ -11,11 +11,12 @@ function prompt_status() {
     fi
 }
 
+echo | tee -a $log_file
 echo -e "STARTS GLUE CATALOG DEPLOYMENT:" | tee -a $log_file
 
 # Getting the databases created on glue catalog, if both the database and 
 # table has not been created, so proceed to do it.
-database='jobpost-project'
+database='jobpost'
 databases_list=$( aws glue get-databases | jq '.DatabaseList[].Name' -r )
 database_check=$( echo $databases_list | grep -w "$database")
 tables=( 'posters' 'softwares' 'languages' )

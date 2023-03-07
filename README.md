@@ -9,8 +9,8 @@ and stored is wheater require such programming language, english speaking, or do
 ![ProjectaDiagram](./diagrams/diagram4.png "ProjectaDiagram")
 
 ## Running the Project
-the project is only reproducible if you meet the following requirement in your premise.  
-  
+the project is only reproducible if you meet the following requirement in your premise.<br>
+<br>
 - An Amazon Web Services Account, Using a full-permissions account. (Not root, but admin)
 - python==3.9
 - boto3==1.26.79
@@ -21,7 +21,7 @@ the project is only reproducible if you meet the following requirement in your p
 - pandas==1.5.2
 - pyarrow==11.0.0 (required to handle parquet)
 - numpy==1.24.1
-  
-to create all the resources necessaries for the project run:
-`chmod 744 ./deployment`
-`./deployment`
+<br>
+to create all the resources necessaries for the project run:<br>
+`chmod 744 ./deployment`<br>
+`./deployment`<br>

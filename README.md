@@ -10,7 +10,7 @@ and stored at there like wheater require such programming language, english spea
 
 ## Running the Project
 'the project is only reproducible if you meet the following requirement in your premise'  
-Python \eq 3.9  
-\tL Selelenium
+Python \<= 3.9  
+    L Selelenium
     L Chromium Webdriver
     L

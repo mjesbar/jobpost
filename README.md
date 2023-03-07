@@ -11,8 +11,13 @@ and stored at there like wheater require such programming language, english spea
 ## Running the Project
 'the project is only reproducible if you meet the following requirement in your premise'  
   
-- python\==3.9  
-- selenium
-- chromium==
-- pandas\==1.5.2
-- numpy
+- An Amazon Web Services Account, Using a full-permissions account. (Not root, but admin)
+- python==3.9
+- boto3==1.26.79
+- botocore==1.29.79
+- awscli==2.9.11
+- selenium==4.8.0
+- chromium==110.0.5481.177
+- pandas==1.5.2
+- pyarrow==11.0.0 (required to handle parquet)
+- numpy==1.24.1

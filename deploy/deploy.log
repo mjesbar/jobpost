@@ -226,3 +226,70 @@ STARTS FUNCTION DEPLOYMENT :
 Checking if function cleaner exists ... 
 'cleaner' function already exists in AWS account.
 END FUNCTION DEPLOYMENT
+
+STARTS BUCKET DEPLOYMENT:
+Checking if bucket exists ... 
+'jobpost-project' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS S3 Bucket Creation ... {
+    "Location": "/jobpost-project"
+}
+OK
+END BUCKET DEPLOYMENT
+
+STARTS GLUE CATALOG DEPLOYMENT:
+'jobpost' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS Glue Database in Catalog Creation ... OK
+   > AWS Glue Tables in jobpost DB Creation ... OK
+END BUCKET DEPLOYMENT
+
+STARTS FUNCTION DEPLOYMENT :
+Checking if function cleaner exists ... 
+'cleaner' doesn't exists, Creating Resource ... 
+AWS response:
+   > AWS Lambda Function Creation ... {
+    "FunctionName": "cleaner",
+    "FunctionArn": "arn:aws:lambda:us-east-1:326117943082:function:cleaner",
+    "Runtime": "python3.9",
+    "Role": "arn:aws:iam::326117943082:role/AdminRole",
+    "Handler": "code.lambda_handler",
+    "CodeSize": 5964,
+    "Description": "",
+    "Timeout": 30,
+    "MemorySize": 512,
+    "LastModified": "2023-03-07T01:09:32.247+0000",
+    "CodeSha256": "AXTeicYIFcNA7ETllgyPikof/oeNz+Fygee19XpRQ00=",
+    "Version": "10",
+    "TracingConfig": {
+        "Mode": "PassThrough"
+    },
+    "RevisionId": "dea0738c-dd8b-4ee0-a2a0-c5d7f131eb0d",
+    "Layers": [
+        {
+            "Arn": "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:3",
+            "CodeSize": 49753273
+        }
+    ],
+    "State": "Pending",
+    "StateReason": "The function is being created.",
+    "StateReasonCode": "Creating",
+    "PackageType": "Zip",
+    "Architectures": [
+        "x86_64"
+    ],
+    "EphemeralStorage": {
+        "Size": 512
+    },
+    "SnapStart": {
+        "ApplyOn": "None",
+        "OptimizationStatus": "Off"
+    }
+}
+OK
+   > AWS Lambda Function Trigger Settings ... OK
+   > AWS Lambda Function Permissions Settings ... {
+    "Statement": "{\"Sid\":\"cleanerS3TriggerPermission\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Action\":\"lambda:InvokeFunction\",\"Resource\":\"arn:aws:lambda:us-east-1:326117943082:function:cleaner\",\"Condition\":{\"StringEquals\":{\"AWS:SourceAccount\":\"326117943082\"},\"ArnLike\":{\"AWS:SourceArn\":\"arn:aws:s3:::jobpost-project\"}}}"
+}
+OK
+END FUNCTION DEPLOYMENT

@@ -3,7 +3,7 @@
 set -o pipefail
 
 path="$HOME/Github/jobpost"
-log="$path/deploy.log"
+log="$path/deploy/deploy.log"
 current_date=$( date )
 
 echo " - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - " | tee $log

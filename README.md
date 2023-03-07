@@ -23,5 +23,5 @@ the project is only reproducible if you meet the following requirement in your p
 - numpy==1.24.1
 <br>
 to create all the resources necessaries for the project run:<br>
-`chmod 744 ./deployment`<br>
-`./deployment`<br>
+    `chmod 744 ./deployment`<br>
+    `./deployment`<br>

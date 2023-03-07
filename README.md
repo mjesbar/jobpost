@@ -2,14 +2,14 @@
 
 ## Review
 This project collects information about job posts published in 'Computrabajo' and classiffy 3 tables in different aspects.
-Those tables organize and structs many data relevant for the one whose purpose is searach for a job. The information structed
-and stored at there like wheater require such programming language, english speaking, or domains certain software.
+Those tables organize and struct many data relevant for the one whose purpose is to search for a job. The information structured
+and stored is wheater require such programming language, english speaking, or domains certain software.
 
 ## Project Diagram
 ![ProjectaDiagram](./diagrams/diagram4.png "ProjectaDiagram")
 
 ## Running the Project
-'the project is only reproducible if you meet the following requirement in your premise'  
+the project is only reproducible if you meet the following requirement in your premise.  
   
 - An Amazon Web Services Account, Using a full-permissions account. (Not root, but admin)
 - python==3.9
@@ -21,3 +21,7 @@ and stored at there like wheater require such programming language, english spea
 - pandas==1.5.2
 - pyarrow==11.0.0 (required to handle parquet)
 - numpy==1.24.1
+  
+to create all the resources necessaries for the project run:
+`chmod 744 ./deployment`
+`./deployment`

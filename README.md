@@ -32,5 +32,5 @@ the project is only reproducible if you meet the following requirement in your p
 `./run`
 
 Scheduling the `run` command for your purposes, can mantain a Catalog constantly populating. Due to job posting behaivor,
-I would recommend set the schedule daily.
+I would recommend set the period of execution daily.
 

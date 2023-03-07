@@ -13,6 +13,6 @@ and stored at there like wheater require such programming language, english spea
   
 - python\==3.9  
 - selenium
-- chromium Webdriver
-- pandas\<=>1.5.2
+- chromium==
+- pandas\==1.5.2
 - numpy

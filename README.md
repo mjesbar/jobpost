@@ -22,9 +22,15 @@ the project is only reproducible if you meet the following requirement in your p
 - pyarrow==11.0.0 (required to handle parquet)
 - numpy==1.24.1
 
-* to create all the resources necessaries for the project run:<br>
-<br>
+* To create all the resources for the project, run:<br>
+
 ``chmod 744 ./deployment``<br>
 ``./deployment``<br>
 
+* To Populate the Glue Catalog and can have data to query on Athena, run:
+
+`./run`
+
+Scheduling the `run` command for your purposes, can mantain a Catalog constantly populating. Due to job posting behaivor,
+I would recommend set the schedule daily.
 

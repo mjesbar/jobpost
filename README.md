@@ -22,6 +22,9 @@ the project is only reproducible if you meet the following requirement in your p
 - pyarrow==11.0.0 (required to handle parquet)
 - numpy==1.24.1
 
-to create all the resources necessaries for the project run:<br>
-    ``chmod 744 ./deployment``<br>
-    ``./deployment``<br>
+* to create all the resources necessaries for the project run:<br>
+<br>
+``chmod 744 ./deployment``<br>
+``./deployment``<br>
+
+

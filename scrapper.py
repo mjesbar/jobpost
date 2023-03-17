@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions
 # configurations
 warnings.filterwarnings('ignore')
 
+
 # main function
 if (__name__ == "__main__"):
 

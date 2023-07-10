@@ -64,7 +64,7 @@ if (__name__ == "__main__"):
 
     # Crawling the url --------------------------------------------------------------------------------
     while (True):
-        
+    
         errors = list()
         scroll = 160
         # clicking over the annoying suggestion alert
